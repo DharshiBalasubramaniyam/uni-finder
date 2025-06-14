@@ -19,13 +19,13 @@ import CourseDetailView from "../components/common/CourseDetailsView";
 // Fix repeating classnamees of sidebar and details - done
 // Extract repeated csv files read across 2 pages into a common function
 // Extract table into a common component
-// If not proper values found for required fields from the URL, redirect to home page - done
+// If not proper values found for required fields from the URL, redirect to home page
 // Check unicode coulun of csv file for duplicates
 // hide - done
-// view details
+// view details - done
 // export
 // hide, export filter close loading icons 
-// button reuse - don
+// button reuse - done
 // sort values in select input
 
 type OptionType = { value: string; label: string };
@@ -169,7 +169,7 @@ export default function ResultsPage() {
       setZscore(z);
       setSelectZscore(selz);
       console.log("subs: ", subs)
-      let subValues = subs.length > 0 ? subs.map(s => s.value) : selectedSubjects.map(s => s.value);
+      const subValues = subs.length > 0 ? subs.map(s => s.value) : selectedSubjects.map(s => s.value);
       fetchCourses(z, selz, st.value, dist.value, subValues, uni.value)
    }, [streams, districts, subjects, universities, streamFromURL, districtFromURL, subjectsFromURL, zscoreFromURL, selectZFromURL, universityFromURL, universities, data]);
 

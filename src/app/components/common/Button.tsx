@@ -5,7 +5,7 @@ type ButtonProps = {
    className?: string;
 };
 
-function Button({ type = "button", text, onclick, className }: { type?: "button" | "submit" | "reset", text: string, onclick: (e: React.MouseEvent<HTMLButtonElement>) => void, className?: string }) {
+function Button({ type = "button", text, onclick, className }: ButtonProps) {
    return (
       <button
          type={type}
