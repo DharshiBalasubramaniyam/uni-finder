@@ -6,11 +6,13 @@ import Header from "./components/common/header";
 import TextInput from "./components/form/TextInput";
 import SelectInput from "./components/form/SelectInput";
 import Label from "./components/form/Label";
+import { useRouter } from "next/navigation";
 
 type OptionType = { value: string; label: string };
 
 export default function Home() {
 
+  const router = useRouter();
   const [streams, setStreams] = useState<OptionType[]>([]);
   const [stream, setStream] = useState<OptionType | null>(null);
   const [districts, setDistricts] = useState<OptionType[]>([]);
@@ -45,7 +47,7 @@ export default function Home() {
     if (!validate(zscore, district, stream, selectedSubjects)) {
       return;
     }
-    
+    router.push(`/results?zscore=${zscore}&district=${district?.value}&stream=${stream?.value}&subjects=${selectedSubjects.map(s => s.value)}`)
   };
 
   useEffect(() => {
