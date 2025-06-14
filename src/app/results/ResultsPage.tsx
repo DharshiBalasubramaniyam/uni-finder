@@ -176,6 +176,7 @@ export default function ResultsPage() {
 
    const onApplyFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
+      setTableData([]);
       console.log("Form submitted with:", {
          zscore,
          district,
