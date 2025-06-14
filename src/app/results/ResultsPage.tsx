@@ -307,10 +307,6 @@ export default function ResultsPage() {
                                        <tr
                                           key={`${course.unicode}-${index}`}
                                           className="justify-center"
-                                          onClick={() => {
-                                             setDetailsDisplay("grid")
-                                             setDetailView(course);
-                                          }}
                                        >
                                           <td className="p-2">{course.unicode}</td>
                                           <td className="p-2">{course.courseName}</td>
@@ -320,8 +316,8 @@ export default function ResultsPage() {
                                              <Button
                                                 icon={<FaBook />}
                                                 onclick={() => {
-                                                   // setDetailsDisplay("grid")
-                                                   // setDetailView(course);
+                                                   setDetailsDisplay("grid")
+                                                   setDetailView(course);
                                                 }}
                                              />
                                              <Button
