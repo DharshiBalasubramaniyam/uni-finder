@@ -1,4 +1,4 @@
-import { useState, CSSProperties } from "react";
+import { CSSProperties } from "react";
 import { MoonLoader } from "react-spinners";
 
 const override: CSSProperties = {
@@ -17,7 +17,7 @@ function Loading() {
                cssOverride={override}
                size={50}
                speedMultiplier={0.5}
-               
+
                aria-label="Loading Spinner"
                data-testid="loader"
             />
