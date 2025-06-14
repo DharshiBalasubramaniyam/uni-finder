@@ -1,5 +1,3 @@
-import { FaUpload } from "react-icons/fa";
-
 type ButtonProps = {
    type?: "button" | "submit" | "reset";  
    text?: string;

@@ -25,7 +25,7 @@ import { FaBook, FaEyeSlash, FaFilter, FaTimes, FaUpload } from "react-icons/fa"
 // hide - done
 // view details - done
 // export
-// hide, export filter close loading icons 
+// hide, export filter close loading icons  
 // button reuse - done
 // sort values in select input
 
