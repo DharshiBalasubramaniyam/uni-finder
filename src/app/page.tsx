@@ -21,7 +21,7 @@ export default function Home() {
   const [selectedSubjects, setSelectedSubjects] = useState<OptionType[]>([]);
   const [zscore, setZscore] = useState("");
 
-  const fetchCSVData = async (csvPath: string, onComplete: (data: any[]) => void) => {
+  const fetchCSVData = async (csvPath: string, onComplete: (data: OptionType[]) => void) => {
     try {
       const response = await fetch(csvPath);
       const text = await response.text();
@@ -30,7 +30,7 @@ export default function Home() {
         header: true,
         skipEmptyLines: true,
       });
-      onComplete(result.data as any[]);
+      onComplete(result.data as OptionType[]);
     } catch (error) {
       console.error("Error fetch CSV data:", csvPath, error);
     }
@@ -51,9 +51,9 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchCSVData("streams.csv", (data: any[]) => setStreams(data))
-    fetchCSVData("districts.csv", (data: any[]) => setDistricts(data))
-    fetchCSVData("subjects.csv", (data: any[]) => setSubjects(data))
+    fetchCSVData("streams.csv", (data: OptionType[]) => setStreams(data))
+    fetchCSVData("districts.csv", (data: OptionType[]) => setDistricts(data))
+    fetchCSVData("subjects.csv", (data: OptionType[]) => setSubjects(data))
   }, []);
 
   return (
