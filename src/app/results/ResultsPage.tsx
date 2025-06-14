@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import Loading from "../components/common/Loading";
 import Button from "../components/common/Button";
 import CourseDetailView from "../components/common/CourseDetailsView";
+import { FaBook, FaEyeSlash, FaFilter, FaTimes, FaUpload } from "react-icons/fa";
 
 // TODO:
 // Put loading - done
@@ -265,10 +266,12 @@ export default function ResultsPage() {
                         <div className="flex gap-2 ">
                            <Button
                               text="Export"
+                              icon={<FaUpload />}
                               onclick={() => console.log("export clicked")}
                            />
                            <Button
                               text="Filter"
+                              icon={<FaFilter />}
                               onclick={() => setSideBarDisplay("right-0")}
                            />
                         </div>
@@ -308,7 +311,7 @@ export default function ResultsPage() {
                                           <td className="p-2">{course.zscore}</td>
                                           <td className="p-2 flex gap-2 last:justify-center">
                                              <Button
-                                                text="Eligibility"
+                                                icon={<FaBook />}
                                                 onclick={() => {
                                                    setDetailsDisplay("grid")
                                                    // setDetailView(String(course.courseCode).padStart(3, '0'));
@@ -316,7 +319,7 @@ export default function ResultsPage() {
                                                 }}
                                              />
                                              <Button
-                                                text="Hide"
+                                                icon={<FaEyeSlash/>}
                                                 onclick={() => handleHide(course.unicode, true)}
                                              />
                                           </td>
@@ -341,7 +344,8 @@ export default function ResultsPage() {
                      onclick={onApplyFilters}
                   />
                   <Button
-                     text="Close"
+                     icon={<FaTimes />}
+                     className="border border-red-500 bg-transparent hover:bg-red-600"
                      onclick={() => setSideBarDisplay("right-[-100%]")}
                   />
                </div>
@@ -422,7 +426,8 @@ export default function ResultsPage() {
                <div className="flex items-center justify-between mb-4">
                   <h3 className="font-blod underline">{detailView?.courseName}</h3>
                   <Button
-                     text="Close"
+                     icon={<FaTimes />}
+                     className="bg-red-500 hover:bg-red-600"
                      onclick={() => setDetailsDisplay("hidden")}
                   />
                </div>
