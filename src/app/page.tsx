@@ -59,7 +59,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
       <Header />
-      <form className="p-4 w-full max-w-2xl mx-auto mt-5 rounded border border-gray-700" onSubmit={onSubmit}>
+      <form className="p-4 w-full max-w-2xl mx-auto mt-30 rounded border border-gray-700" onSubmit={onSubmit}>
         <div className="w-full flex flex-wrap gap-3 *:flex-1 *:min-w-[200px] *:mt-2">
           <div>
             <Label htmlFor="zscore" text="Z-score" />
