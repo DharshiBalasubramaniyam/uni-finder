@@ -59,10 +59,10 @@ export default function ResultsPage() {
 
    useEffect(() => {
       if (streams.length > 0 && !stream && streamFromURL) {
-         setStream(streams.find(st => st.value == streamFromURL) || { label: "", value: "" }); 
+         setStream(streams.find(st => st.value == streamFromURL) || { label: "", value: "" });
       }
       if (districts.length > 0 && !district && districtFromURL) {
-         setDistrict(districts.find(dis => dis.value == districtFromURL) || { label: "", value: "" }); 
+         setDistrict(districts.find(dis => dis.value == districtFromURL) || { label: "", value: "" });
       }
       const subs: OptionType[] = [];
       if (subjects.length > 0 && !selectedSubjects.length && subjectsFromURL) {
@@ -71,10 +71,10 @@ export default function ResultsPage() {
             const subject = subjects.find(sub => sub.value == value);
             if (subject) subs.push(subject);
          });
-         setSelectedSubjects(subs); 
+         setSelectedSubjects(subs);
       }
       if (universities.length > 0 && !university && universityFromURL) {
-         setUniversity(universities.find(univ => univ.value == universityFromURL) || { label: "", value: "" }); 
+         setUniversity(universities.find(univ => univ.value == universityFromURL) || { label: "", value: "" });
       }
       if (zscoreFromURL) {
          setZscore(zscoreFromURL);
@@ -139,10 +139,15 @@ export default function ResultsPage() {
          <div id="filter-sidebar" className="h-screen fixed top-0 transition-all duration-500 right-[-100%] z-50 m w-96 bg-black shadow-md shadow-white p-3">
             <div className="flex items-center justify-between mb-3">
                <h2 className="text-xl">Filter</h2>
-               <button
-                  onClick={() => document.getElementById("filter-sidebar")?.setAttribute("class", "h-screen fixed top-0 transition-all duration-500 right-[-100%] z-50 w-96 bg-black shadow-md shadow-white p-3")}
-                  className="p-2 hover:bg-gray-700 rounded"
-               >close</button>
+               <div className="flex gap-2">
+                  <button
+                     className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >Apply</button>
+                  <button
+                     onClick={() => document.getElementById("filter-sidebar")?.setAttribute("class", "h-screen fixed top-0 transition-all duration-500 right-[-100%] z-50 w-96 bg-black shadow-md shadow-white p-3")}
+                     className="p-2 border border-gray-700 hover:bg-gray-700 rounded"
+                  >close</button>
+               </div>
             </div>
             <form>
                <div>
