@@ -208,7 +208,7 @@ export default function ResultsPage() {
          filtered = filtered.filter(course => parseFloat(course[validDist]) <= parseFloat(zscore))
       }
 
-      filtered = filtered.filter(c => c.stream == stream || subjects.every(sub => c.subjects.includes(sub)))
+      filtered = filtered.filter(c => (c.stream == stream && subjects.every(sub => c.subjects.includes(sub))) || (c.stream != stream && subjects.every(sub => c.subjects.includes(sub))))
 
       if (university != "") {
          filtered = filtered.filter(c => c.university == university)
@@ -304,7 +304,14 @@ export default function ResultsPage() {
                                           </td>
                                        </tr>
                                     ) : (
-                                       <tr key={`${course.unicode}-${index}`} className="justify-center">
+                                       <tr
+                                          key={`${course.unicode}-${index}`}
+                                          className="justify-center"
+                                          onClick={() => {
+                                             setDetailsDisplay("grid")
+                                             setDetailView(course);
+                                          }}
+                                       >
                                           <td className="p-2">{course.unicode}</td>
                                           <td className="p-2">{course.courseName}</td>
                                           <td className="p-2">{course.university}</td>
@@ -313,13 +320,12 @@ export default function ResultsPage() {
                                              <Button
                                                 icon={<FaBook />}
                                                 onclick={() => {
-                                                   setDetailsDisplay("grid")
-                                                   // setDetailView(String(course.courseCode).padStart(3, '0'));
-                                                   setDetailView(course);
+                                                   // setDetailsDisplay("grid")
+                                                   // setDetailView(course);
                                                 }}
                                              />
                                              <Button
-                                                icon={<FaEyeSlash/>}
+                                                icon={<FaEyeSlash />}
                                                 onclick={() => handleHide(course.unicode, true)}
                                              />
                                           </td>
@@ -422,7 +428,7 @@ export default function ResultsPage() {
          </div>
 
          <div className={`details h-screen ${detailsDisplay} place-items-center w-full p-4 fixed top-0 left-0 bg-[rgba(0, 0, 0, 0.5)]`}>
-            <div className="w-full max-w-8/12 min-h-60 max-h-10/12 overflow-y-scroll bg-white rounded p-4 text-black">
+            <div className="w-full max-w-md min-h-60 max-h-10/12 overflow-y-scroll bg-white rounded p-4 text-black">
                <div className="flex items-center justify-between mb-4">
                   <h3 className="font-blod underline">{detailView?.courseName}</h3>
                   <Button
