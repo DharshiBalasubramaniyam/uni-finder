@@ -472,7 +472,7 @@ export default function ResultsPage() {
          <div className={`details h-screen ${detailsDisplay} place-items-center w-full p-4 fixed top-0 left-0 bg-[rgba(0, 0, 0, 0.5)]`}>
             <div className="w-full max-w-md min-h-60 max-h-10/12 overflow-y-scroll bg-white rounded p-4 text-black">
                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-blod underline">{detailView?.courseName}</h3>
+                  <h3 className="font-blod underline uppercase">{detailView?.courseName}</h3>
                   <Button
                      icon={<FaTimes />}
                      className="bg-red-500 hover:bg-red-600"
