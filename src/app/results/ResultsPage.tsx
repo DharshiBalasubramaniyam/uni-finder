@@ -18,6 +18,7 @@ import autoTable from 'jspdf-autotable'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal } from "@radix-ui/react-dropdown-menu";
 import { CourseDataType, OptionType, TableDataType } from "../types/Types";
 import { fetchCSVData } from "./Utils";
+import Footer from "../components/common/Footer";
 
 // TODO:
 // Extract repeated csv files read across 2 pages into a common function
@@ -328,7 +329,7 @@ export default function ResultsPage() {
                                  <th className="p-2">Action</th>
                               </tr>
                            </thead>
-                           <tbody className="bg-gray-700 text-white *:text-center *:hover:bg-gray-600 *:border-b *:border-b-gray-800">
+                           <tbody className="bg-gray-700 text-white text-sm *:text-center *:hover:bg-gray-600 *:border-b *:border-b-gray-800">
                               {
                                  tableData.map((course, index) => {
                                     return course.isHidden ? (
@@ -487,6 +488,7 @@ export default function ResultsPage() {
             </div>
 
          </div>
+         <Footer />
       </main>
    );
 }

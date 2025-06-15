@@ -8,6 +8,7 @@ import Label from "./components/form/Label";
 import { useRouter } from "next/navigation";
 import Header from "./components/common/Header";
 import { OptionType } from "./types/Types";
+import Footer from "./components/common/Footer";
 
 export default function Home() {
 
@@ -118,6 +119,7 @@ export default function Home() {
           </button>
         </form>
       </div>
+      <Footer/>
     </main>
   );
 }
