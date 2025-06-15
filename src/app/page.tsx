@@ -2,11 +2,11 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import Papa from 'papaparse';
-import Header from "./components/common/header";
 import TextInput from "./components/form/TextInput";
 import SelectInput from "./components/form/SelectInput";
 import Label from "./components/form/Label";
 import { useRouter } from "next/navigation";
+import Header from "./components/common/Header";
 
 type OptionType = { value: string; label: string };
 
@@ -59,7 +59,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
       <Header />
-      <form className="p-4 w-full max-w-2xl mx-auto mt-30 rounded border border-gray-700" onSubmit={onSubmit}>
+      <form className="p-4 w-full max-w-2xl mx-auto mt-36 rounded border border-gray-700" onSubmit={onSubmit}>
         <div className="w-full flex flex-wrap gap-3 *:flex-1 *:min-w-[200px] *:mt-2">
           <div>
             <Label htmlFor="zscore" text="Z-score" />
@@ -69,6 +69,7 @@ export default function Home() {
               onChange={(e) => setZscore(e.target.value)}
               placeholder="Enter your Z-score"
               required={true}
+              className="bg-gray-800 h-10"
             />
           </div>
           <div>
@@ -111,7 +112,7 @@ export default function Home() {
         </div>
         <button
           type="submit"
-          className="w-full mt-6 bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className="w-full mt-6 bg-cyan-500 text-white p-2 rounded hover:bg-cyan-600"
         >
           Search
         </button>

@@ -41,18 +41,18 @@ function SelectInput({ isMultiple, id, options, value, onChange, placeholder, re
                }),
                control: (base, state) => ({
                   ...base,
-                  backgroundColor: '#171717', // background of the select box
+                  backgroundColor: state.isFocused ? '#083344' : '#1f2937', // background of the select box
                   color: '#f00',              // text color inside the box
-                  borderColor: state.isFocused ? '#fff' : '#fff',
+                  borderColor: state.isFocused ? '#06b6d4' : '#fff',
                   borderWidth: 2,
                   boxShadow: state.isFocused ? '0 0 0 1px #0000ff' : 'none',
                   '&:hover': {
-                     borderColor: '#999',
+                     borderColor: '#22d3ee',
                   },
                }),
                multiValue: (base) => ({
                   ...base,
-                  backgroundColor: '#0000ff',
+                  backgroundColor: '#0891b2',
                }),
                multiValueLabel: (base) => ({
                   ...base,
@@ -90,13 +90,13 @@ function SelectInput({ isMultiple, id, options, value, onChange, placeholder, re
             styles={{
                control: (base, state) => ({
                   ...base,
-                  backgroundColor: '#171717', // background of the select box
+                  backgroundColor: state.isFocused ? '#083344' : '#1f2937', // background of the select box
                   color: '#f00',              // text color inside the box
-                  borderColor: state.isFocused ? '#fff' : '#fff',
+                  borderColor: state.isFocused ? '#06b6d4' : '#fff',
                   borderWidth: 2,
                   boxShadow: state.isFocused ? '0 0 0 1px #0000ff' : 'none',
                   '&:hover': {
-                     borderColor: '#999',
+                     borderColor: '#22d3ee',
                   },
                }),
                singleValue: (base) => ({
@@ -108,7 +108,7 @@ function SelectInput({ isMultiple, id, options, value, onChange, placeholder, re
                   backgroundColor: state.isFocused
                      ? '#6c757d' // on hover
                      : state.isSelected
-                        ? '#0000ff' // selected option
+                        ? '#0891b2' // selected option
                         : '#171717',
                   color: '#fff',
                }),

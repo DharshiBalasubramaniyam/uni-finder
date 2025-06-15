@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-const CourseDetailView = ({ filePath }: { filePath: string }) => {
+const MarkDownViewer = ({ filePath }: { filePath: string }) => {
   const [eligibility, setEligibility] = useState('');
 
   console.log(eligibility)
@@ -20,10 +20,10 @@ const CourseDetailView = ({ filePath }: { filePath: string }) => {
   }, [filePath]);
 
   return (
-    <div className="prose prose-sm sm:prose max-w-none">
+    <div className="pcyan pcyan-sm sm:pcyan max-w-none">
       <ReactMarkdown>{eligibility}</ReactMarkdown>
     </div>
   );
 };
 
-export default CourseDetailView;
+export default MarkDownViewer;

@@ -9,9 +9,9 @@ type InputDisplayProps = {
 
 function InputDisplay({value, key, onEdit}: InputDisplayProps) {
    return (
-      <div key={key} className="flex items-center pl-2 border-2 border-blue-500 rounded-sm w-fit text-sm">
+      <div key={key} className="flex items-center pl-2 border-2 border-cyan-500 rounded-sm w-fit text-sm">
          <span className="mr-2 capitalize">{value}</span>
-         <span className="w-px h-5 bg-blue-700"></span>
+         <span className="w-px h-5 bg-cyan-700"></span>
          <Button
             text=""
             icon={<FaEdit />}

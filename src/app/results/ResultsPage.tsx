@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import { useEffect, useRef, useState } from "react";
-import Header from "../components/common/header";
+import Header from "../components/common/Header";
 import Label from "../components/form/Label";
 import TextInput from "../components/form/TextInput";
 import Papa from 'papaparse';
@@ -11,7 +11,7 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Loading from "../components/common/Loading";
 import Button from "../components/common/Button";
-import CourseDetailView from "../components/common/CourseDetailsView";
+import MarkDownViewer from "../components/common/MarkDownViewer";
 import { FaBook, FaDownload, FaEyeSlash, FaFilter, FaTimes } from "react-icons/fa";
 import InputDisplay from "./InputDisplay";
 import jsPDF from 'jspdf'
@@ -34,10 +34,11 @@ import {
 // Check unicode coulun of csv file for duplicates
 // hide - done
 // view details - done
-// export
-// hide, export filter close loading icons  
+// export - done
+// hide, export filter close loading icons   - done
 // button reuse - done
 // sort values in select input
+// find invalid course selections
 // any subjects courses are not selcted
 
 type OptionType = { value: string; label: string };
@@ -159,21 +160,26 @@ export default function ResultsPage() {
       fetchCourseData("ugc_final_uni_formatted.csv", (data: CourseDataType[]) => setData(data))
    }, []);
 
-   useEffect(() => {
+   function loadFilterParams() {
       console.log("hi")
+
+      if (!streamFromURL || !districtFromURL || !zscoreFromURL || !selectZFromURL || !subjectsFromURL) {
+         router.push("/");
+      }
+
       const st = streams.find(st => st.value == streamFromURL) || { label: "", value: "" }
       const dist = districts.find(dis => dis.value == districtFromURL) || { label: "", value: "" }
       const subs: OptionType[] = [];
       const z = zscoreFromURL || ""
       const selz = selectZFromURL == "true"
       const uni = universities.find(univ => univ.value == universityFromURL) || { label: "", value: "" }
-      if (streams.length > 0 && !stream && streamFromURL) {
+      if (streams.length > 0 && streamFromURL) {
          setStream(st);
       }
-      if (districts.length > 0 && !district && districtFromURL) {
+      if (districts.length > 0 && districtFromURL) {
          setDistrict(dist);
       }
-      if (subjects.length > 0 && !selectedSubjects.length && subjectsFromURL) {
+      if (subjects.length > 0 && subjectsFromURL) {
          const subjectValues = subjectsFromURL.split(",");
          subjectValues.forEach(value => {
             const subject = subjects.find(sub => sub.value == value);
@@ -181,19 +187,22 @@ export default function ResultsPage() {
          });
          setSelectedSubjects(subs);
       }
-      if (universities.length > 0 && !university && universityFromURL) {
+      if (universities.length > 0 && universityFromURL) {
          setUniversity(uni);
       }
       setZscore(z);
       setSelectZscore(selz);
-      console.log("subs: ", subs)
+      console.log("subs: ", subs);
       const subValues = subs.length > 0 ? subs.map(s => s.value) : selectedSubjects.map(s => s.value);
       fetchCourses(z, selz, st.value, dist.value, subValues, uni.value)
+   }
+
+   useEffect(() => {
+      loadFilterParams()
    }, [streams, districts, subjects, universities, streamFromURL, districtFromURL, subjectsFromURL, zscoreFromURL, selectZFromURL, universityFromURL, universities, data]);
 
    const onApplyFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
-      setTableData([]);
       console.log("Form submitted with:", {
          zscore,
          district,
@@ -205,6 +214,7 @@ export default function ResultsPage() {
       if (!validate(zscore, district, stream, selectedSubjects)) {
          return;
       }
+      setTableData([]);
       setSideBarDisplay("right-[-100%]")
       router.push(`/results?zscore=${zscore}&selectz=${selectZscore}&district=${district?.value}&stream=${stream?.value}&subjects=${selectedSubjects.map(s => s.value)}&university=${university?.value || ""}`);
    }
@@ -269,7 +279,7 @@ export default function ResultsPage() {
 
       const columns = ["Unicode", "Course", "University", "Zscore"]
       const rows = tableData.filter(c => {
-         if (unhiddenOnly) 
+         if (unhiddenOnly)
             return !c.isHidden
          return true
       }).map(c => {
@@ -302,21 +312,21 @@ export default function ResultsPage() {
                         <div className="flex gap-2 ">
                            <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                 <button className="IconButton flex gap-2 items-center justify-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer" aria-label="Customise options">
-                                    <FaDownload/>
+                                 <button className="IconButton flex gap-2 items-center justify-center px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-700 cursor-pointer" aria-label="Customise options">
+                                    <FaDownload />
                                     <span className={"hidden md:inline"}>Download</span>
                                  </button>
                               </DropdownMenuTrigger>
 
                               <DropdownMenuPortal>
                                  <DropdownMenuContent className="DropdownMenuContent bg-gray-700 rounded shadow-md" sideOffset={10}>
-                                    <DropdownMenuItem 
+                                    <DropdownMenuItem
                                        className="DropdownMenuItem p-2 outline-none cursor-pointer hover:bg-gray-500 "
                                        onClick={() => downLoadPDF(false)}
                                     >
                                        Download all courses
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem 
+                                    <DropdownMenuItem
                                        className="DropdownMenuItem p-2 outline-none cursor-pointer hover:bg-gray-500 "
                                        onClick={() => downLoadPDF(true)}
                                     >
@@ -327,7 +337,7 @@ export default function ResultsPage() {
                            </DropdownMenu>
                            <Button
                               text="Filter"
-                              icon={<FaFilter />} 
+                              icon={<FaFilter />}
                               onclick={() => setSideBarDisplay("right-0")}
                            />
                         </div>
@@ -384,9 +394,9 @@ export default function ResultsPage() {
                         )
                      }
                      {
-                        university?.label && (
+                        universityFromURL && (
                            <InputDisplay
-                              value={university.label}
+                              value={universityFromURL}
                               key="University"
                               onEdit={() => {
                                  universityRef.current?.focus();
@@ -418,7 +428,7 @@ export default function ResultsPage() {
                                              <span className="font-bold">{course.courseName}, {course.university}</span> is hidden.
                                              <span
                                                 onClick={() => handleHide(course.unicode, false)}
-                                                className="text-blue-400 cursor-pointer underline hover:text-blue-500 ml-2"
+                                                className="text-cyan-400 cursor-pointer underline hover:text-cyan-500 ml-2"
                                              >Show</span>
                                           </td>
                                        </tr>
@@ -456,7 +466,7 @@ export default function ResultsPage() {
             )
          }
 
-         <div className={`h-screen fixed top-0 transition-all duration-500 ${sideBarDisplay} z-50 m w-full max-w-96 bg-black shadow-md shadow-white p-3`}>
+         <div className={`h-screen fixed top-0 transition-all duration-500 ${sideBarDisplay} z-50 m w-full max-w-96 bg-gray-800 shadow-md shadow-white p-3`}>
             <div className="flex items-center justify-between mb-3">
                <h2 className="text-xl">Filter</h2>
                <div className="flex gap-2">
@@ -467,7 +477,10 @@ export default function ResultsPage() {
                   <Button
                      icon={<FaTimes />}
                      className="border border-red-500 bg-transparent hover:bg-red-600"
-                     onclick={() => setSideBarDisplay("right-[-100%]")}
+                     onclick={() => {
+                        loadFilterParams(); 
+                        setSideBarDisplay("right-[-100%]")
+                     }}
                   />
                </div>
             </div>
@@ -561,7 +574,7 @@ export default function ResultsPage() {
                <p className="mb-3"><strong>University:</strong> {detailView?.university}</p>
                <p className="mb-3"><strong>Z-Score:</strong> {detailView?.zscore}</p>
                <p className="mb-1"><strong>Eligibility:</strong></p>
-               {detailView && <CourseDetailView filePath={`course_descriptions/${String(detailView.courseCode).padStart(3, '0')}.md`} />}
+               {detailView && <MarkDownViewer filePath={`course_descriptions/${String(detailView.courseCode).padStart(3, '0')}.md`} />}
             </div>
 
          </div>
