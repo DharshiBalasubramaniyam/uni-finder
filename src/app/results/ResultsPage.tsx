@@ -11,9 +11,17 @@ import { useRouter } from "next/navigation";
 import Loading from "../components/common/Loading";
 import Button from "../components/common/Button";
 import CourseDetailView from "../components/common/CourseDetailsView";
-import { FaBook, FaEdit, FaEyeSlash, FaFilter, FaTimes, FaUpload } from "react-icons/fa";
+import { FaBook, FaDownload, FaEyeSlash, FaFilter, FaTimes, FaUpload } from "react-icons/fa";
 import InputDisplay from "./InputDisplay";
-
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import {
+   DropdownMenu,
+   DropdownMenuTrigger,
+   DropdownMenuContent,
+   DropdownMenuItem,
+   DropdownMenuPortal
+} from "@radix-ui/react-dropdown-menu";
 // TODO:
 // Put loading - done
 // Add universities - done
@@ -256,6 +264,29 @@ export default function ResultsPage() {
       setTableData(newData)
    }
 
+   function downLoadPDF(unhiddenOnly: boolean) {
+      const doc = new jsPDF()
+
+      doc.setFontSize(18)
+      doc.text('University course selection list', 14, 20)
+
+      const columns = ["Unicode", "Course", "University", "Zscore"]
+      const rows = tableData.filter(c => {
+         if (unhiddenOnly) 
+            return !c.isHidden
+         return true
+      }).map(c => {
+         return [c.unicode, c.courseName, c.university, c.zscore]
+      })
+
+      autoTable(doc, {
+         startY: 30, head: [columns], body: rows
+      })
+
+      doc.save("university_course_list.pdf")
+
+   }
+
    return (
       <main className="flex min-h-screen flex-col">
          <Header />
@@ -269,23 +300,43 @@ export default function ResultsPage() {
          {
             tableData.length != 0 && (
                <div>
-                  <div className="px-4 py-1 w-full mt-30">
+                  <div className="px-4 py-1 w-full mt-36 md:mt-30">
                      <div className="w-full flex items-center justify-end">
                         <div className="flex gap-2 ">
-                           <Button
-                              text="Export"
-                              icon={<FaUpload />}
-                              onclick={() => console.log("export clicked")}
-                           />
+                           <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                 <button className="IconButton flex gap-2 items-center justify-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer" aria-label="Customise options">
+                                    <FaDownload/>
+                                    <span className={"hidden md:inline"}>Download</span>
+                                 </button>
+                              </DropdownMenuTrigger>
+
+                              <DropdownMenuPortal>
+                                 <DropdownMenuContent className="DropdownMenuContent bg-gray-700 rounded shadow-md" sideOffset={10}>
+                                    <DropdownMenuItem 
+                                       className="DropdownMenuItem p-2 outline-none cursor-pointer hover:bg-gray-500 "
+                                       onClick={() => downLoadPDF(false)}
+                                    >
+                                       Download all courses
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem 
+                                       className="DropdownMenuItem p-2 outline-none cursor-pointer hover:bg-gray-500 "
+                                       onClick={() => downLoadPDF(true)}
+                                    >
+                                       Download unhidden courses
+                                    </DropdownMenuItem>
+                                 </DropdownMenuContent>
+                              </DropdownMenuPortal>
+                           </DropdownMenu>
                            <Button
                               text="Filter"
-                              icon={<FaFilter />}
+                              icon={<FaFilter />} 
                               onclick={() => setSideBarDisplay("right-0")}
                            />
                         </div>
                      </div>
                   </div>
-                  <p className="text-center text-md">{tableData.length} results found for search:</p>
+                  <p className="text-center text-md mt-2">{tableData.length} results found for search:</p>
                   <div className="flex-1 mx-4 p-1 mt-3 flex gap-2 flex-wrap rounded items-center justify-center">
                      {
                         selectZFromURL != "true" && zscoreFromURL && (
