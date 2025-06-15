@@ -1,4 +1,4 @@
-// eslint-disable @typescript-eslint/no-explicit-any
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import { useEffect, useRef, useState } from "react";
 import Header from "../components/common/header";
