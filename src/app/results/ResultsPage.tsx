@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "../components/common/header";
 import Label from "../components/form/Label";
 import TextInput from "../components/form/TextInput";
@@ -11,7 +11,8 @@ import { useRouter } from "next/navigation";
 import Loading from "../components/common/Loading";
 import Button from "../components/common/Button";
 import CourseDetailView from "../components/common/CourseDetailsView";
-import { FaBook, FaEyeSlash, FaFilter, FaTimes, FaUpload } from "react-icons/fa";
+import { FaBook, FaEdit, FaEyeSlash, FaFilter, FaTimes, FaUpload } from "react-icons/fa";
+import InputDisplay from "./InputDisplay";
 
 // TODO:
 // Put loading - done
@@ -28,6 +29,7 @@ import { FaBook, FaEyeSlash, FaFilter, FaTimes, FaUpload } from "react-icons/fa"
 // hide, export filter close loading icons  
 // button reuse - done
 // sort values in select input
+// any subjects courses are not selcted
 
 type OptionType = { value: string; label: string };
 type CourseDataType = {
@@ -103,6 +105,16 @@ export default function ResultsPage() {
 
    const [data, setData] = useState<CourseDataType[]>([]);
    const [tableData, setTableData] = useState<TableDataType[]>([])
+
+   const zscoreRef = useRef<HTMLInputElement>(null)
+   const districtRef = useRef<any>(null)
+   const streamRef = useRef<any>(null)
+   const subjectsRef = useRef<any>(null)
+   const universityRef = useRef<any>(null)
+   const [universityFocus, setUniversityFocus] = useState<boolean>(false)
+   const [districtFocus, setDistrictFocus] = useState<boolean>(false)
+   const [subjectsFocus, setSubjectFocus] = useState<boolean>(false)
+   const [StreamFocus, setStreamFocus] = useState<boolean>(false)
 
    const fetchCSVData = async (csvPath: string, onComplete: (data: OptionType[]) => void) => {
       try {
@@ -258,12 +270,13 @@ export default function ResultsPage() {
             tableData.length != 0 && (
                <div>
                   <div className="px-4 py-1 w-full mt-25">
-                     <div className="w-full flex items-center justify-between">
-                        <div>
+                     <div className="w-full flex items-center justify-end">
+                        {/* <div>
                            <span className="text-bold text-blue-300">
                               {tableData.length}/{data.length} Courses found!
                            </span>
-                        </div>
+                        </div> */}
+
                         <div className="flex gap-2 ">
                            <Button
                               text="Export"
@@ -277,6 +290,69 @@ export default function ResultsPage() {
                            />
                         </div>
                      </div>
+                  </div>
+                  <p className="text-center text-md">{tableData.length} results found for search:</p>
+                  <div className="flex-1 mx-4 p-1 mt-3 flex gap-2 flex-wrap rounded items-center justify-center">
+                     {
+                        selectZFromURL != "true" && zscoreFromURL && (
+                           <InputDisplay
+                              value={zscoreFromURL}
+                              key="Zscore"
+                              onEdit={() => {
+                                 zscoreRef.current?.focus();
+                                 setSideBarDisplay("right-0");
+                              }}
+                           />
+                        )
+                     }
+                     {
+                        districtFromURL && (
+                           <InputDisplay
+                              value={districtFromURL}
+                              key="District"
+                              onEdit={() => {
+                                 districtRef.current?.focus();
+                                 setSideBarDisplay("right-0");
+                              }}
+                           />
+                        )
+                     }
+                     {
+                        streamFromURL && (
+                           <InputDisplay
+                              value={streamFromURL}
+                              key="Stream"
+                              onEdit={() => {
+                                 streamRef.current?.focus();
+                                 setSideBarDisplay("right-0");
+                              }}
+                           />
+                        )
+                     }
+                     {
+                        subjectsFromURL && (
+                           <InputDisplay
+                              value={subjectsFromURL.split(",").map(s => s.split("_").join(" ")).join(", ")}
+                              key="subjects"
+                              onEdit={() => {
+                                 subjectsRef.current?.focus();
+                                 setSideBarDisplay("right-0");
+                              }}
+                           />
+                        )
+                     }
+                     {
+                        university?.label && (
+                           <InputDisplay
+                              value={university.label}
+                              key="University"
+                              onEdit={() => {
+                                 universityRef.current?.focus();
+                                 setSideBarDisplay("right-0");
+                              }}
+                           />
+                        )
+                     }
                   </div>
                   <div className="p-4 w-full">
                      <div className="w-full overflow-x-auto">
@@ -362,6 +438,7 @@ export default function ResultsPage() {
                      onChange={(e) => setZscore(e.target.value)}
                      placeholder="Enter your Z-score"
                      required={true}
+                     ref={zscoreRef}
                   />
                   <div className="flex mt-2 items-center gap-2 justify-items-start">
                      <CheckBox
@@ -377,7 +454,9 @@ export default function ResultsPage() {
                   <SelectInput
                      isMultiple={false}
                      id="district"
+                     autoFocus={districtFocus}
                      options={districts}
+                     ref={districtRef}
                      value={district}
                      onChange={(selectedOption) => setDistrict(selectedOption as OptionType | null)}
                      placeholder="Select district"
@@ -389,7 +468,9 @@ export default function ResultsPage() {
                   <SelectInput
                      isMultiple={false}
                      id="stream"
+                     autoFocus={StreamFocus}
                      options={streams}
+                     ref={streamRef}
                      value={stream}
                      onChange={(selectedOption) => setStream(selectedOption as OptionType | null)}
                      placeholder="Select stream"
@@ -402,7 +483,9 @@ export default function ResultsPage() {
                      isMultiple={true}
                      id="subjects"
                      options={subjects}
+                     autoFocus={subjectsFocus}
                      value={selectedSubjects}
+                     ref={subjectsRef}
                      onChange={(selectedOptions) => setSelectedSubjects(selectedOptions as OptionType[])}
                      placeholder="Select subjects"
                      required={true}
@@ -415,7 +498,9 @@ export default function ResultsPage() {
                      isMultiple={false}
                      id="university"
                      options={universities}
+                     autoFocus={universityFocus}
                      value={university}
+                     ref={universityRef}
                      onChange={(selectedOption) => setUniversity(selectedOption as OptionType | null)}
                      placeholder="Select university"
                      required={true}

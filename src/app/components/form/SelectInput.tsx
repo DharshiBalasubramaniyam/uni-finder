@@ -13,9 +13,12 @@ interface SelectInputProps {
    placeholder?: string;
    required: boolean;
    isOptionDisabled?: () => boolean;
+   autoFocus?: boolean;
+   ref?: React.Ref<any>;
 }
 
-function SelectInput({ isMultiple, id, options, value, onChange, placeholder, required, isOptionDisabled }: SelectInputProps) {
+function SelectInput({ isMultiple, id, options, value, onChange, placeholder, required, isOptionDisabled, ref, autoFocus = false }: SelectInputProps) {
+   
    return (
       isMultiple ? (
          <Select<OptionType, true>
@@ -25,20 +28,23 @@ function SelectInput({ isMultiple, id, options, value, onChange, placeholder, re
             value={value}
             isOptionDisabled={isOptionDisabled}
             onChange={onChange}
+            autoFocus={autoFocus}
             isClearable
             required={required}
+            ref={ref}
             placeholder={placeholder}
             styles={{
                input: (base) => ({
                   ...base,
                   color: "#fff",
                }),
-               control: (base) => ({
+               control: (base, state) => ({
                   ...base,
                   backgroundColor: '#171717', // background of the select box
-                  color: '#fff',              // text color inside the box
-                  borderColor: '#ccc',
-                  boxShadow: 'none',
+                  color: '#f00',              // text color inside the box
+                  borderColor: state.isFocused ? '#fff' : '#fff',
+                  borderWidth: 2,
+                  boxShadow: state.isFocused ? '0 0 0 1px #0000ff' : 'none',
                   '&:hover': {
                      borderColor: '#999',
                   },
@@ -67,7 +73,7 @@ function SelectInput({ isMultiple, id, options, value, onChange, placeholder, re
                         ? '#0000ff' // selected option
                         : '#171717',
                   color: '#fff',
-               }),
+               })
             }}
          />
       ) : (
@@ -78,15 +84,16 @@ function SelectInput({ isMultiple, id, options, value, onChange, placeholder, re
             onChange={onChange}
             isClearable
             required={required}
-            className="bg-black text-white"
+            ref={ref}
             placeholder={placeholder}
             styles={{
-               control: (base) => ({
+               control: (base, state) => ({
                   ...base,
                   backgroundColor: '#171717', // background of the select box
-                  color: '#fff',              // text color inside the box
-                  borderColor: '#ccc',
-                  boxShadow: 'none',
+                  color: '#f00',              // text color inside the box
+                  borderColor: state.isFocused ? '#fff' : '#fff',
+                  borderWidth: 2,
+                  boxShadow: state.isFocused ? '0 0 0 1px #0000ff' : 'none',
                   '&:hover': {
                      borderColor: '#999',
                   },
@@ -107,6 +114,10 @@ function SelectInput({ isMultiple, id, options, value, onChange, placeholder, re
                placeholder: (base) => ({
                   ...base,
                   color: '#888',
+               }),
+               input: (base) => ({
+                  ...base,
+                  color: '#fff', // text color inside the input
                }),
             }}
          />
