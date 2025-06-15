@@ -269,14 +269,8 @@ export default function ResultsPage() {
          {
             tableData.length != 0 && (
                <div>
-                  <div className="px-4 py-1 w-full mt-25">
+                  <div className="px-4 py-1 w-full mt-30">
                      <div className="w-full flex items-center justify-end">
-                        {/* <div>
-                           <span className="text-bold text-blue-300">
-                              {tableData.length}/{data.length} Courses found!
-                           </span>
-                        </div> */}
-
                         <div className="flex gap-2 ">
                            <Button
                               text="Export"
