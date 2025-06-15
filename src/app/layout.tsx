@@ -13,6 +13,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Uni Finder",
   description: "Uni Finder - Sri Lanka",
+  icons: {
+    icon: "/favicon.ico"
+  }
 };
 
 export default function RootLayout({
@@ -22,6 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      </head>
       <body
         className={`${poppins.variable}`}
       >
