@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Papa from 'papaparse';
 
 export const fetchCSVData = async (csvPath: string, onComplete: (data: any[]) => void) => {
