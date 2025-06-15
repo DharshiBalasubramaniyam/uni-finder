@@ -1,3 +1,4 @@
+// eslint-disable @typescript-eslint/no-explicit-any
 "use client"
 import { useEffect, useRef, useState } from "react";
 import Header from "../components/common/header";
@@ -11,7 +12,7 @@ import { useRouter } from "next/navigation";
 import Loading from "../components/common/Loading";
 import Button from "../components/common/Button";
 import CourseDetailView from "../components/common/CourseDetailsView";
-import { FaBook, FaDownload, FaEyeSlash, FaFilter, FaTimes, FaUpload } from "react-icons/fa";
+import { FaBook, FaDownload, FaEyeSlash, FaFilter, FaTimes } from "react-icons/fa";
 import InputDisplay from "./InputDisplay";
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
@@ -119,10 +120,6 @@ export default function ResultsPage() {
    const streamRef = useRef<any>(null)
    const subjectsRef = useRef<any>(null)
    const universityRef = useRef<any>(null)
-   const [universityFocus, setUniversityFocus] = useState<boolean>(false)
-   const [districtFocus, setDistrictFocus] = useState<boolean>(false)
-   const [subjectsFocus, setSubjectFocus] = useState<boolean>(false)
-   const [StreamFocus, setStreamFocus] = useState<boolean>(false)
 
    const fetchCSVData = async (csvPath: string, onComplete: (data: OptionType[]) => void) => {
       try {
@@ -499,7 +496,6 @@ export default function ResultsPage() {
                   <SelectInput
                      isMultiple={false}
                      id="district"
-                     autoFocus={districtFocus}
                      options={districts}
                      ref={districtRef}
                      value={district}
@@ -513,7 +509,6 @@ export default function ResultsPage() {
                   <SelectInput
                      isMultiple={false}
                      id="stream"
-                     autoFocus={StreamFocus}
                      options={streams}
                      ref={streamRef}
                      value={stream}
@@ -528,7 +523,6 @@ export default function ResultsPage() {
                      isMultiple={true}
                      id="subjects"
                      options={subjects}
-                     autoFocus={subjectsFocus}
                      value={selectedSubjects}
                      ref={subjectsRef}
                      onChange={(selectedOptions) => setSelectedSubjects(selectedOptions as OptionType[])}
@@ -543,7 +537,6 @@ export default function ResultsPage() {
                      isMultiple={false}
                      id="university"
                      options={universities}
-                     autoFocus={universityFocus}
                      value={university}
                      ref={universityRef}
                      onChange={(selectedOption) => setUniversity(selectedOption as OptionType | null)}
