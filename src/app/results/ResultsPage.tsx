@@ -280,7 +280,7 @@ export default function ResultsPage() {
          startY: 30, head: [columns], body: rows
       })
 
-      doc.save("university_course_list.pdf")
+      doc.save(unhiddenOnly ? "university_course_list_unhidden.pdf" : "university_course_list_all.pdf")
 
    }
 
