@@ -22,13 +22,17 @@
   }
 }
 
-* {
+/* * {
   font-family: verdana;
-}
+} */
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+* {
+  font-family: "poppins", "verdana";
 }
 
 .details {

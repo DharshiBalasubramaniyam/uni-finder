@@ -74,9 +74,9 @@ export default function ResultsPage() {
    function loadFilterParams() {
       console.log("hi")
 
-      if (!streamFromURL || !districtFromURL || !zscoreFromURL || !selectZFromURL || !subjectsFromURL) {
-         router.push("/");
-      }
+      // if (!streamFromURL || !districtFromURL || !zscoreFromURL || !selectZFromURL || !subjectsFromURL) {
+      //    router.push("/");
+      // }
 
       const st = streams.find(st => st.value == streamFromURL) || { label: "", value: "" }
       const dist = districts.find(dis => dis.value == districtFromURL) || { label: "", value: "" }

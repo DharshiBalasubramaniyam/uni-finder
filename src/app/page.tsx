@@ -38,7 +38,7 @@ export default function Home() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted with:", {
-      zscore, 
+      zscore,
       district,
       stream,
       subjects: selectedSubjects,
@@ -58,70 +58,72 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
       <Header />
-      <form className="p-4 w-full max-w-2xl mx-auto mt-36 rounded border border-gray-700" onSubmit={onSubmit}>
-        <div className="w-full flex flex-wrap gap-3 *:flex-1 *:min-w-[200px] *:mt-2">
-          <div>
-            <Label htmlFor="zscore" text="Z-score" />
-            <TextInput
-              id="zscore"
-              value={zscore}
-              onChange={(e) => setZscore(e.target.value)}
-              placeholder="Enter your Z-score"
-              required={true}
-              className="bg-gray-800 h-10"
-            />
+      <div className="w-full p-2 grid place-items-center mt-36">
+        <form className="p-4 w-full max-w-2xl rounded border border-gray-700" onSubmit={onSubmit}>
+          <div className="w-full flex flex-wrap gap-3 *:flex-1 *:min-w-[200px] *:mt-2">
+            <div>
+              <Label htmlFor="zscore" text="Z-score" />
+              <TextInput
+                id="zscore"
+                value={zscore}
+                onChange={(e) => setZscore(e.target.value)}
+                placeholder="Enter your Z-score"
+                required={true}
+                className="bg-gray-800 h-10"
+              />
+            </div>
+            <div>
+              <Label htmlFor="district" text="District" />
+              <SelectInput
+                isMultiple={false}
+                id="district"
+                options={districts}
+                value={district}
+                onChange={(selectedOption) => setDistrict(selectedOption as OptionType | null)}
+                placeholder="Select district"
+                required={true}
+              />
+            </div>
+            <div>
+              <Label htmlFor="stream" text="Stream" />
+              <SelectInput
+                isMultiple={false}
+                id="stream"
+                options={streams}
+                value={stream}
+                onChange={(selectedOption) => setStream(selectedOption as OptionType | null)}
+                placeholder="Select stream"
+                required={true}
+              />
+            </div>
           </div>
-          <div>
-            <Label htmlFor="district" text="District" />
+          <div className="mt-4">
+            <Label htmlFor="subjects" text="Subjects" />
             <SelectInput
-              isMultiple={false}
-              id="district"
-              options={districts}
-              value={district}
-              onChange={(selectedOption) => setDistrict(selectedOption as OptionType | null)}
-              placeholder="Select district"
+              isMultiple={true}
+              id="subjects"
+              options={subjects}
+              value={selectedSubjects}
+              onChange={(selectedOptions) => setSelectedSubjects(selectedOptions as OptionType[])}
+              placeholder="Select subjects"
               required={true}
+              isOptionDisabled={() => selectedSubjects.length >= 3}
             />
           </div>
-          <div>
-            <Label htmlFor="stream" text="Stream" />
-            <SelectInput
-              isMultiple={false}
-              id="stream"
-              options={streams}
-              value={stream}
-              onChange={(selectedOption) => setStream(selectedOption as OptionType | null)}
-              placeholder="Select stream"
-              required={true}
-            />
-          </div>
-        </div>
-        <div className="mt-4">
-          <Label htmlFor="subjects" text="Subjects" />
-          <SelectInput
-            isMultiple={true}
-            id="subjects"
-            options={subjects}
-            value={selectedSubjects}
-            onChange={(selectedOptions) => setSelectedSubjects(selectedOptions as OptionType[])}
-            placeholder="Select subjects"
-            required={true}
-            isOptionDisabled={() => selectedSubjects.length >= 3}
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full mt-6 bg-cyan-500 text-white p-2 rounded hover:bg-cyan-600"
-        >
-          Search
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="w-full mt-6 bg-cyan-500 text-white p-2 rounded hover:bg-cyan-600"
+          >
+            Search
+          </button>
+        </form>
+      </div>
     </main>
   );
 }
 
 function validate(zscore: string, district: OptionType | null, stream: OptionType | null, subjects: OptionType[]) {
-  
+
   if (!zscore) {
     alert("Z-score is required.");
     return false
@@ -137,16 +139,16 @@ function validate(zscore: string, district: OptionType | null, stream: OptionTyp
     alert("District is required.");
     return false
   }
-  
+
   if (!stream) {
     alert("Stream is required.");
     return false
   }
-  
+
   if (subjects.length != 3) {
     alert("You must select 3 subjects.");
     return false
   }
   return true;
-  
+
 }
