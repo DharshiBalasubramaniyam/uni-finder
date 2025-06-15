@@ -7,8 +7,7 @@ import SelectInput from "./components/form/SelectInput";
 import Label from "./components/form/Label";
 import { useRouter } from "next/navigation";
 import Header from "./components/common/Header";
-
-type OptionType = { value: string; label: string };
+import { OptionType } from "./types/Types";
 
 export default function Home() {
 

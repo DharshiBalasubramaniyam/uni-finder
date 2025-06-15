@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import Header from "../components/common/Header";
 import Label from "../components/form/Label";
 import TextInput from "../components/form/TextInput";
-import Papa from 'papaparse';
 import SelectInput from "../components/form/SelectInput";
 import CheckBox from "../components/form/CheckBox";
 import { useSearchParams } from "next/navigation";
@@ -23,68 +22,15 @@ import {
    DropdownMenuItem,
    DropdownMenuPortal
 } from "@radix-ui/react-dropdown-menu";
+import { CourseDataType, OptionType, TableDataType } from "../types/Types";
+import { fetchCSVData } from "./Utils";
 // TODO:
-// Put loading - done
-// Add universities - done
-// Add pagination
-// Fix repeating classnamees of sidebar and details - done
 // Extract repeated csv files read across 2 pages into a common function
-// Extract table into a common component
 // If not proper values found for required fields from the URL, redirect to home page
 // Check unicode coulun of csv file for duplicates
-// hide - done
-// view details - done
-// export - done
-// hide, export filter close loading icons   - done
-// button reuse - done
 // sort values in select input
 // find invalid course selections
 // any subjects courses are not selcted
-
-type OptionType = { value: string; label: string };
-type CourseDataType = {
-   code: string;
-   course: string;
-   university: string;
-   stream: string;
-   gampaha: string;
-   colombo: string;
-   kaluthara: string;
-   galle: string;
-   matara: string;
-   hambantota: string;
-   jaffna: string;
-   kilinochchi: string;
-   mallaitivu: string;
-   vavuniya: string;
-   mannar: string;
-   anuradhapura: string;
-   polonnaruwa: string;
-   badulla: string;
-   monaragala: string;
-   nuwara_eliya: string;
-   kandy: string;
-   matale: string;
-   kurunegala: string;
-   puttalam: string;
-   ratnapura: string;
-   trincomalee: string;
-   batticaloa: string;
-   ampara: string;
-   kegalle: string;
-   course_code: string;
-   uni_code: string;
-   subjects: string;
-   [key: string]: string; // Add index signature
-}
-type TableDataType = {
-   unicode: string;
-   courseCode: string;
-   courseName: string;
-   university: string;
-   zscore: string;
-   isHidden: boolean
-}
 
 export default function ResultsPage() {
 
@@ -122,42 +68,12 @@ export default function ResultsPage() {
    const subjectsRef = useRef<any>(null)
    const universityRef = useRef<any>(null)
 
-   const fetchCSVData = async (csvPath: string, onComplete: (data: OptionType[]) => void) => {
-      try {
-         const response = await fetch(csvPath);
-         const text = await response.text();
-         console.log("CSV data fetched successfully:", text.slice(0, 100)); // Log first 100 characters for debugging
-         const result = Papa.parse(text, {
-            header: true,
-            skipEmptyLines: true,
-         });
-         onComplete(result.data as OptionType[]);
-      } catch (error) {
-         console.error("Error fetch CSV data:", csvPath, error);
-      }
-   };
-
-   const fetchCourseData = async (csvPath: string, onComplete: (data: CourseDataType[]) => void) => {
-      try {
-         const response = await fetch(csvPath);
-         const text = await response.text();
-         console.log("CSV data fetched successfully:", text.slice(0, 100)); // Log first 100 characters for debugging
-         const result = Papa.parse(text, {
-            header: true,
-            skipEmptyLines: true,
-         });
-         onComplete(result.data as CourseDataType[]);
-      } catch (error) {
-         console.error("Error fetch CSV data:", csvPath, error);
-      }
-   };
-
    useEffect(() => {
-      fetchCSVData("streams.csv", (data: OptionType[]) => setStreams(data))
-      fetchCSVData("districts.csv", (data: OptionType[]) => setDistricts(data))
-      fetchCSVData("subjects.csv", (data: OptionType[]) => setSubjects(data))
-      fetchCSVData("universities.csv", (data: OptionType[]) => setUniversities(data))
-      fetchCourseData("ugc_final_uni_formatted.csv", (data: CourseDataType[]) => setData(data))
+      fetchCSVData("streams.csv", (data: any[]) => setStreams(data as OptionType[]))
+      fetchCSVData("districts.csv", (data: any[]) => setDistricts(data as OptionType[]))
+      fetchCSVData("subjects.csv", (data: any[]) => setSubjects(data as OptionType[]))
+      fetchCSVData("universities.csv", (data: any[]) => setUniversities(data as OptionType[]))
+      fetchCSVData("ugc_final_uni_formatted.csv", (data: any[]) => setData(data as CourseDataType[]))
    }, []);
 
    function loadFilterParams() {
@@ -220,7 +136,6 @@ export default function ResultsPage() {
    }
 
    const fetchCourses = (zscore: string, selectZscore: boolean, stream: string, district: string, subjects: string[], university: string) => {
-      // zscore selectZscore stream district subjects university
       console.log({ zscore, selectZscore, stream, district, subjects, university })
       let filtered: CourseDataType[] = data
       const validDist: keyof CourseDataType | undefined = district
@@ -248,7 +163,7 @@ export default function ResultsPage() {
          return {
             unicode: c.code,
             courseCode: c.course_code,
-            courseName: c.course,
+            courseName: c.course.toLowerCase(),
             university: universities.find(u => u.value == c.university)?.label || "N/A",
             zscore: Number.parseFloat(c[validDist]).toFixed(4),
             isHidden: false
@@ -419,7 +334,6 @@ export default function ResultsPage() {
                               </tr>
                            </thead>
                            <tbody className="bg-gray-700 text-white *:text-center *:hover:bg-gray-600 *:border-b *:border-b-gray-800">
-                              {/* Example row, replace with dynamic data */}
                               {
                                  tableData.map((course, index) => {
                                     return course.isHidden ? (
@@ -438,7 +352,7 @@ export default function ResultsPage() {
                                           className="justify-center"
                                        >
                                           <td className="p-2">{course.unicode}</td>
-                                          <td className="p-2">{course.courseName}</td>
+                                          <td className="p-2 capitalize">{course.courseName}</td>
                                           <td className="p-2">{course.university}</td>
                                           <td className="p-2">{course.zscore}</td>
                                           <td className="p-2 flex gap-2 last:justify-center">

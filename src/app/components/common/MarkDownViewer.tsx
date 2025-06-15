@@ -20,7 +20,7 @@ const MarkDownViewer = ({ filePath }: { filePath: string }) => {
   }, [filePath]);
 
   return (
-    <div className="pcyan pcyan-sm sm:pcyan max-w-none">
+    <div className="prose prose-sm sm:prose max-w-none">
       <ReactMarkdown>{eligibility}</ReactMarkdown>
     </div>
   );
