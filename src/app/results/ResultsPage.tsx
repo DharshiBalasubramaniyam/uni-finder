@@ -15,15 +15,10 @@ import { FaBook, FaDownload, FaEyeSlash, FaFilter, FaTimes } from "react-icons/f
 import InputDisplay from "./InputDisplay";
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
-import {
-   DropdownMenu,
-   DropdownMenuTrigger,
-   DropdownMenuContent,
-   DropdownMenuItem,
-   DropdownMenuPortal
-} from "@radix-ui/react-dropdown-menu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal } from "@radix-ui/react-dropdown-menu";
 import { CourseDataType, OptionType, TableDataType } from "../types/Types";
 import { fetchCSVData } from "./Utils";
+
 // TODO:
 // Extract repeated csv files read across 2 pages into a common function
 // If not proper values found for required fields from the URL, redirect to home page
