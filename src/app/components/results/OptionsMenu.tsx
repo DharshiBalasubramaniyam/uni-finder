@@ -42,9 +42,6 @@ function OptionsMenu({tableColumns, setTableColumns, downLoadPDF, setSideBarDisp
                                           )
                                        )
                                     }}
-                                    onSelect={(e) => {
-                                       e.preventDefault()
-                                    }}
                                  >
                                     {c.show ? <FaCheckCircle /> : <FaCircle />}
                                     {c.columnName}
