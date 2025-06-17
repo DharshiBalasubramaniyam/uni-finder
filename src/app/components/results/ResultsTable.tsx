@@ -23,7 +23,7 @@ function ResultsTable({ tableColumns, tableData, handleHide, showEligibility }: 
                   <tr className="bg-gray-800">
                      {
                         tableColumns.filter(c => c.show).map(c => {
-                           return <th className="p-2 uppercase">{c.columnName}</th>
+                           return <th key={c.columnName} className="p-2 uppercase">{c.columnName}</th>
 
                         })
                      }
@@ -59,7 +59,7 @@ function ResultsTable({ tableColumns, tableData, handleHide, showEligibility }: 
                                              {
                                                 course.degree_programs.map(d => {
                                                    return (
-                                                      <li className="mb-1">{d.name} <br/><i>({d.duration} years)</i></li>
+                                                      <li key={d.name} className="mb-1">{d.name} <br/><i>({d.duration} years)</i></li>
                                                    )
                                                 })
                                              }

@@ -20,7 +20,7 @@ export const DataStoreContext = createContext<{
 })
 
 
-export function DataStoreProvider({ children }: PropsWithChildren<{}>) {
+export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
    const [streams, setStreams] = useState<OptionType[]>([]);
    const [districts, setDistricts] = useState<OptionType[]>([]);
    const [universities, setUniversities] = useState<OptionType[]>([]);
