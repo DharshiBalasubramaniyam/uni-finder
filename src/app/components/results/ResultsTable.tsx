@@ -9,12 +9,12 @@ type ResultsTablePropsType = {
    showEligibility: (course: TableDataType) => void
 }
 
-function ResultsTable({tableColumns, tableData, handleHide, showEligibility}: ResultsTablePropsType) {
+function ResultsTable({ tableColumns, tableData, handleHide, showEligibility }: ResultsTablePropsType) {
 
    if (tableData.length == 0) {
       return <></>
    }
-   
+
    return (
       <div className="p-4 w-full">
          <div className="w-full overflow-x-auto">
@@ -23,7 +23,7 @@ function ResultsTable({tableColumns, tableData, handleHide, showEligibility}: Re
                   <tr className="bg-gray-800">
                      {
                         tableColumns.filter(c => c.show).map(c => {
-                           return <th className="p-2 uppercase text-sm">{c.columnName}</th>
+                           return <th className="p-2 uppercase">{c.columnName}</th>
 
                         })
                      }
@@ -54,8 +54,22 @@ function ResultsTable({tableColumns, tableData, handleHide, showEligibility}: Re
                                        {c.columnName == "course name" && c.show && <td className="p-2 capitalize">{course.courseName}</td>}
                                        {c.columnName == "university" && c.show && <td className="p-2">{course.university}</td>}
                                        {c.columnName == "zscore" && c.show && <td className="p-2">{course.zscore}</td>}
-                                       {c.columnName == "degree/duration" && c.show && <td className="p-2">bsc hons in software engineering</td>}
-                                       {c.columnName == "medium" && c.show && <td className="p-2">English</td>}
+                                       {c.columnName == "degree/duration" && c.show && (
+                                          <td className="p-2">
+                                             {
+                                                course.degree_programs.map(d => {
+                                                   return (
+                                                      <li className="mb-1">{d.name} <br/><i>({d.duration} years)</i></li>
+                                                   )
+                                                })
+                                             }
+                                          </td>
+                                       )}
+                                       {c.columnName == "medium" && c.show && (
+                                          <td className="p-2 capitalize">
+                                                {course.medium.toString()}
+                                          </td>
+                                       )}
                                        {c.columnName == "actions" && c.show && (
                                           <td className="p-2 flex gap-2 last:justify-center">
                                              <Button

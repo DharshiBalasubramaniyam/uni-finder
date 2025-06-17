@@ -44,7 +44,6 @@ export default function ResultsPage() {
       { columnName: "university", show: true },
       { columnName: "zscore", show: true },
       { columnName: "degree/duration", show: false },
-      { columnName: "duration", show: false },
       { columnName: "medium", show: false },
       { columnName: "actions", show: true }
    ]);
@@ -134,13 +133,22 @@ export default function ResultsPage() {
       console.log("filetred: ", filtered.length, data.length)
 
       let finalData: TableDataType[] = filtered.map(c => {
+         const degrees = c.degree.split("|")
+         const durations = c.duration.split("|")
+         
+         const degree_duration_pairs = degrees.map((deg, index) => {
+            return {name: deg, duration: degrees.length == durations.length ? durations.at(index) : durations.at(0)}
+         })
+
          return {
             unicode: c.code,
             courseCode: c.course_code,
             courseName: c.course.toLowerCase(),
             university: universities.find(u => u.value == c.university)?.label || "N/A",
             zscore: Number.parseFloat(c[validDist]).toFixed(4),
-            isHidden: false
+            isHidden: false,
+            medium: c.medium.split("|"),
+            degree_programs: degree_duration_pairs
          }
       })
 

@@ -47,7 +47,7 @@ export function DataStoreProvider({ children }: PropsWithChildren<{}>) {
       fetchCSVData("districts.csv", (data: any[]) => setDistricts(data as OptionType[]))
       fetchCSVData("subjects.csv", (data: any[]) => setSubjects(data as OptionType[]))
       fetchCSVData("universities.csv", (data: any[]) => setUniversities(data as OptionType[]))
-      fetchCSVData("ugc_final_uni_formatted.csv", (data: any[]) => setData(data as CourseDataType[]))
+      fetchCSVData("merged.csv", (data: any[]) => setData(data as CourseDataType[]))
    }, []);
 
    return (

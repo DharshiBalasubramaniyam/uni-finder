@@ -1,6 +1,6 @@
-export type OptionType = { 
-   value: string; 
-   label: string 
+export type OptionType = {
+   value: string;
+   label: string
 };
 
 export type CourseDataType = {
@@ -36,6 +36,9 @@ export type CourseDataType = {
    course_code: string;
    uni_code: string;
    subjects: string;
+   medium: string,
+   degree: string,
+   duration: string,
    [key: string]: string;
 }
 export type TableDataType = {
@@ -44,7 +47,9 @@ export type TableDataType = {
    courseName: string;
    university: string;
    zscore: string;
-   isHidden: boolean
+   isHidden: boolean;
+   degree_programs: { name: string, duration: string | undefined}[]
+   medium: string[]
 }
 
 export enum FilterType {
