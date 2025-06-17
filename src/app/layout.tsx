@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { DataStoreProvider } from "./contexts/DataStore";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -31,7 +32,9 @@ export default function RootLayout({
       <body
         className={`${poppins.variable}`}
       >
-        {children}
+        <DataStoreProvider>
+          {children}
+        </DataStoreProvider>
       </body>
     </html>
   );

@@ -46,3 +46,15 @@ export type TableDataType = {
    zscore: string;
    isHidden: boolean
 }
+
+export enum FilterType {
+   STREAM,
+   ZSCORE,
+   UNIVERSITY,
+   KEYWORD,
+   DISTRICT,
+   SELECTZ,
+   SUBJECTS
+}
+
+export type TableColumn = { columnName: string; show: boolean }

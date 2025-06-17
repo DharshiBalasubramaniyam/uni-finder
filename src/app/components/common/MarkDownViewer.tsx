@@ -4,8 +4,6 @@ import ReactMarkdown from 'react-markdown';
 const MarkDownViewer = ({ filePath }: { filePath: string }) => {
   const [eligibility, setEligibility] = useState('');
 
-  console.log(eligibility)
-
   useEffect(() => {
     setEligibility('Loading...');
     fetch(filePath)
@@ -20,7 +18,7 @@ const MarkDownViewer = ({ filePath }: { filePath: string }) => {
   }, [filePath]);
 
   return (
-    <div className="prose prose-sm sm:prose max-w-none">
+    <div className="prose prose-sm sm:prose max-w-none *:text-sm">
       <ReactMarkdown>{eligibility}</ReactMarkdown>
     </div>
   );
