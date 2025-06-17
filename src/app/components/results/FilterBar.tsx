@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FilterType, OptionType } from "@/app/types/Types";
 import { FaTimes } from "react-icons/fa";
 import Button from "../common/Button";

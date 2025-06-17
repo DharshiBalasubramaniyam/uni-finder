@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { OptionType } from "@/app/types/Types";
 import { useSearchParams } from "next/navigation";
 import { RefObject } from "react";
