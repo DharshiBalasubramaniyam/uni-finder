@@ -34,7 +34,7 @@ function ResultsTable({ tableColumns, tableData, handleHide, showEligibility }: 
                      tableData.map((course, index) => {
                         return course.isHidden ? (
                            <tr key={`${course.unicode}-${index}`}>
-                              <td colSpan={5} className="p-2 text-center text-white bg-gray-700 opacity-50 border-b border-b-gray-800">
+                              <td colSpan={tableColumns.filter(c => c.show).length} className="p-2 text-center text-white bg-gray-700 opacity-50 border-b border-b-gray-800">
                                  <span className="font-bold">{course.courseName}, {course.university}</span> is hidden.
                                  <span
                                     onClick={() => handleHide(course.unicode, false)}
