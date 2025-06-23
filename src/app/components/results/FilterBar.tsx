@@ -42,7 +42,7 @@ function FilterBar({
    sideBarDisplay,
    setSideBarDisplay,
    onApplyFilters,
-   loadFilterParams,
+   // loadFilterParams,
 
    zscore,
    zscoreRef,
