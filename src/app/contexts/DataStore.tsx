@@ -42,12 +42,31 @@ export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
       }
    };
 
+   const fetchStreams = async () => {
+      const cachedStreams = JSON.parse(localStorage.getItem("streams") || "null");
+      if (cachedStreams && cachedStreams.expiredAt > Date.now()) {
+         console.log("Using cached streams data: ", cachedStreams.data);
+         setStreams(cachedStreams.data);
+         return;
+      }
+      console.log("Fetching streams data from API");
+      const response = await fetch("/api/streams");
+      if (!response.ok) {
+         console.error("Failed to fetch streams data:", response);
+      }
+      const data = await response.json();
+      localStorage.setItem("streams", JSON.stringify({data: data.data, expiredAt: Date.now() + 7 * 24 * 60 * 60 * 1000}));
+      setStreams(data.data as OptionType[]);
+      console.log("Streams data fetched successfully from api:", data);
+   }
+
    useEffect(() => {
-      fetchCSVData("streams.csv", (data: any[]) => setStreams(data as OptionType[]))
+      // fetchCSVData("streams.csv", (data: any[]) => setStreams(data as OptionType[]))
       fetchCSVData("districts.csv", (data: any[]) => setDistricts(data as OptionType[]))
       fetchCSVData("subjects.csv", (data: any[]) => setSubjects(data as OptionType[]))
       fetchCSVData("universities.csv", (data: any[]) => setUniversities(data as OptionType[]))
       fetchCSVData("merged.csv", (data: any[]) => setData(data as CourseDataType[]))
+      fetchStreams();
    }, []);
 
    return (

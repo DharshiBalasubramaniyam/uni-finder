@@ -82,7 +82,7 @@ function FilterBar({
                   icon={<FaTimes />}
                   className="border border-red-500 bg-transparent hover:bg-red-600"
                   onclick={() => {
-                     loadFilterParams();
+                     // loadFilterParams();
                      setSideBarDisplay("right-[-100%]")
                   }}
                />
