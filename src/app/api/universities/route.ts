@@ -17,7 +17,7 @@ export async function GET() {
       const sheets = google.sheets({ version: 'v4', auth });
 
       const spreadsheetId = '11593XtsICvhF_yDD58mpxyheNGMQVdEcHld8oVVjrrw';  // Replace with your actual Sheet ID
-      const range = 'streams!A1:B7';
+      const range = 'universities!A1:B24';
 
       const response = await sheets.spreadsheets.values.get({
          spreadsheetId,
@@ -53,13 +53,13 @@ export async function GET() {
          return obj;
       });
 
-      // res.status(200).json({  });
       return Response.json(
+
          {
             message: "Data fetched successfully!",
             data: data
          },
-         { status: 200 }
+            { status: 200 }
       );
    } catch (error) {
       console.error("Error fetching data from Google Sheets:", error);
@@ -67,7 +67,7 @@ export async function GET() {
          {
             message: "Internal server error fetching data from Google Sheets.",
          },
-         { status: 500 }
+            { status: 500 }
       );
    }
 }
