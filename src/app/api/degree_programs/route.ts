@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
          );
       }
 
-      let data = values.map(row => {
+      const data = values.map(row => {
          const obj: Record<string, string> = {};
          titles.forEach((title, index) => {
             obj[title] = row[index] || '';

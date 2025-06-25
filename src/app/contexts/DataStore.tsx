@@ -3,7 +3,6 @@
 import { createContext, useEffect, useState } from "react";
 import { OptionType, TableDataType } from "../types/Types";
 import { PropsWithChildren } from "react";
-import Papa from 'papaparse';
 import Loading from "../components/common/Loading";
 
 export const DataStoreContext = createContext<{
