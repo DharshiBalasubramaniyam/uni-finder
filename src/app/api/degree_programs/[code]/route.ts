@@ -1,7 +1,8 @@
 import { google } from 'googleapis';
+impoet { NextRequest } from 'next/server';
 
 export async function GET(
-request: Request,
+request: NextRequest,
 context: {params: {code: string}}
 ) {
 
