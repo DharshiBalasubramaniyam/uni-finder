@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server';
 
 export async function GET(
 request: NextRequest,
-{ params: routeParams }: { params: { code: string } }
+{ params }: { params: Promise<{ code: string }> }
 ) {
 
    try {
@@ -17,7 +17,7 @@ request: NextRequest,
 
       const sheets = google.sheets({ version: 'v4', auth });
 
-      const code = routeParams.code 
+      const code = (await params).code 
       const spreadsheetId = process.env.SPREADSHEET_ID;  
       const range = `course_descriptions!B${Number(code)+1}`;
 
