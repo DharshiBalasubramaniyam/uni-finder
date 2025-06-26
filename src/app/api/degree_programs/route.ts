@@ -1,6 +1,4 @@
 import { google } from 'googleapis';
-import path from 'path';
-import { promises as fs } from 'fs';
 import { NextRequest } from 'next/server';
 import { CourseDataType, TableDataType } from '@/app/types/Types';
 
