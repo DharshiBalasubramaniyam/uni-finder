@@ -1,0 +1,48 @@
+import { google } from 'googleapis';
+
+export async function GET(
+request: Request,
+{params}: {params: {code: string}}
+) {
+
+   try {
+      const keyFile = process.env.GOOGLE_SERVICE_ACCOUNT!;
+      console.log("Key file read successfully:", keyFile);
+      const credentials = JSON.parse(keyFile);
+
+      const auth = new google.auth.GoogleAuth({
+         credentials,
+         scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+      });
+
+      const sheets = google.sheets({ version: 'v4', auth });
+
+      const code = params.code //  TypeError: Cannot read properties of undefined (reading 'code')
+
+      const spreadsheetId = process.env.SPREADSHEET_ID;  
+      const range = `course_descriptions!B${Number(code)+1}`;
+
+      const response = await sheets.spreadsheets.values.get({
+         spreadsheetId,
+         range,
+      });
+
+      const description = response.data.values?.[0]?.[0] || "Not Available";
+
+      return Response.json(
+         {
+            message: "Data fetched successfully!",
+            data: description
+         },
+         { status: 200 }
+      );
+   } catch (error) {
+      console.error("Error fetching data from Google Sheets:", error);
+      return Response.json(
+         {
+            message: "Internal server error fetching data from Google Sheets.",
+         },
+         { status: 500 }
+      );
+   }
+}

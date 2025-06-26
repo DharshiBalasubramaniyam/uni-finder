@@ -25,7 +25,7 @@ function EligibilityViewer({ detailView, detailsDisplay, setDetailsDisplay }: El
             <p className="mb-3 text-sm"><strong>University:</strong> {detailView?.university}</p>
             <p className="mb-3 text-sm"><strong>Z-Score:</strong> {detailView?.zscore}</p>
             <p className="mb-1 text-sm"><strong>Eligibility:</strong></p>
-            {detailView && <MarkDownViewer filePath={`course_descriptions/${String(detailView.courseCode).padStart(3, '0')}.md`} />}
+            {detailView && <MarkDownViewer course_code={detailView.courseCode} />}
          </div>
       </div>
    );
