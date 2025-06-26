@@ -7,7 +7,6 @@ context: {params: {code: string}}
 
    try {
       const keyFile = process.env.GOOGLE_SERVICE_ACCOUNT!;
-      console.log("Key file read successfully:", keyFile);
       const credentials = JSON.parse(keyFile);
 
       const auth = new google.auth.GoogleAuth({
