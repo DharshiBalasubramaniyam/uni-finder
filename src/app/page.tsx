@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import { useEffect, useState } from "react";
-import Papa from 'papaparse';
+import { useState, useContext } from "react";
 import TextInput from "./components/form/TextInput";
 import SelectInput from "./components/form/SelectInput";
 import Label from "./components/form/Label";
@@ -9,32 +8,16 @@ import { useRouter } from "next/navigation";
 import Header from "./components/common/Header";
 import { OptionType } from "./types/Types";
 import Footer from "./components/common/Footer";
+import { DataStoreContext } from "./contexts/DataStore";
 
 export default function Home() {
 
   const router = useRouter();
-  const [streams, setStreams] = useState<OptionType[]>([]);
   const [stream, setStream] = useState<OptionType | null>(null);
-  const [districts, setDistricts] = useState<OptionType[]>([]);
   const [district, setDistrict] = useState<OptionType | null>(null);
-  const [subjects, setSubjects] = useState<OptionType[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<OptionType[]>([]);
   const [zscore, setZscore] = useState("");
-
-  const fetchCSVData = async (csvPath: string, onComplete: (data: OptionType[]) => void) => {
-    try {
-      const response = await fetch(csvPath);
-      const text = await response.text();
-      console.log("CSV data fetched successfully:", text.slice(0, 100)); // Log first 100 characters for debugging
-      const result = Papa.parse(text, {
-        header: true,
-        skipEmptyLines: true,
-      });
-      onComplete(result.data as OptionType[]);
-    } catch (error) {
-      console.error("Error fetch CSV data:", csvPath, error);
-    }
-  };
+  const { subjects, streams, districts } = useContext(DataStoreContext)
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,12 +32,6 @@ export default function Home() {
     }
     router.push(`/results?zscore=${zscore}&district=${district?.value}&stream=${stream?.value}&subjects=${selectedSubjects.map(s => s.value)}`)
   };
-
-  useEffect(() => {
-    fetchCSVData("streams.csv", (data: OptionType[]) => setStreams(data))
-    fetchCSVData("districts.csv", (data: OptionType[]) => setDistricts(data))
-    fetchCSVData("subjects.csv", (data: OptionType[]) => setSubjects(data))
-  }, []);
 
   return (
     <main className="flex min-h-screen flex-col">
