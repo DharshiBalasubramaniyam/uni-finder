@@ -2,8 +2,8 @@ import { google } from 'googleapis';
 import { NextRequest } from 'next/server';
 
 export async function GET(
-request: NextRequest,
-{ params }: { params: Promise<{ code: string }> }
+	request: NextRequest,
+	{ params }: { params: Promise<{ code: string }> }
 ) {
 
    try {
