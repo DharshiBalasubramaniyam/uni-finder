@@ -17,7 +17,7 @@ export async function GET() {
 
       const response = await sheets.spreadsheets.values.get({
          spreadsheetId,
-         process.env.DISTRICTS_RANGE,
+         range
       });
 
       const titles = response.data.values?.[0] || [];
