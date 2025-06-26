@@ -4,6 +4,7 @@ import { createContext, useEffect, useState } from "react";
 import { OptionType, TableDataType } from "../types/Types";
 import { PropsWithChildren } from "react";
 import Loading from "../components/common/Loading";
+import { useRouter } from "next/navigation";
 
 export const DataStoreContext = createContext<{
    streams: OptionType[];
@@ -38,6 +39,7 @@ export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
    const [universities, setUniversities] = useState<OptionType[]>([]);
    const [subjects, setSubjects] = useState<OptionType[]>([]);
    const [data, setData] = useState<TableDataType[]>([]);
+   const router = useRouter();
 
    const fetchData = async (name: string, expiry_days: number, onComplete: (data: any[]) => void) => {
       const cached = JSON.parse(localStorage.getItem(name) || "null");
@@ -47,6 +49,7 @@ export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
       }
       const response = await fetch(`/api/${name}`);
       if (!response.ok) {
+         router.push("/error");
          console.error(`Failed to fetch ${name} data:`, response);
       }
       const data = await response.json();
@@ -68,7 +71,18 @@ export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
       console.log(`Fetching degree programs data from API`);
       const response = await fetch(`/api/degree_programs?zscore=${zscore}&stream=${stream}&district=${district}&university=${university}&subject=${subjects}&selectz=${selectz}&keyword=${keyword}`);
       if (!response.ok) {
+         if (response.status === 400) {
+            const result = await response.json();
+            alert(result.message);
+            router.push("/");
+         } else if (response.status === 404) {
+            alert("No degree programs found for the selected criteria.");
+            router.push("/");
+         } else {
+            router.push("/error");
+         }
          console.error(`Failed to fetch degree programs data:`, response);
+         return;
       }
       const result = await response.json();
       setData(result.data as TableDataType[]);

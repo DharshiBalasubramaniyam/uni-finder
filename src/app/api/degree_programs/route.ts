@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
       const { searchParams } = new URL(request.url);
 
       const zscore = searchParams.get("zscore");
-      const selectz = searchParams.get("selectz");
+      let selectz = searchParams.get("selectz");
       const district = searchParams.get("district");
       const stream = searchParams.get("stream");
       const university = searchParams.get("university");
@@ -34,17 +34,12 @@ export async function GET(request: NextRequest) {
          );
       }
       if (selectz !== 'true' && selectz !== 'false') {
-         return Response.json(
-            {
-               message: "SelectZ parameter must be 'true' or 'false'.",
-            },
-            { status: 400 }
-         );
+         selectz = "false"
       }
       if (district && typeof district !== 'string') {
          return Response.json(
             {
-               message: "District parameter must be a valid string.",
+               message: "District is invalid.",
             },
             { status: 400 }
          );
@@ -52,7 +47,7 @@ export async function GET(request: NextRequest) {
       if (stream && typeof stream !== 'string') {
          return Response.json(
             {
-               message: "Stream parameter must be a valid string.",
+               message: "Stream  is invalid.",
             },
             { status: 400 }
          );
@@ -60,7 +55,7 @@ export async function GET(request: NextRequest) {
       if (subject && typeof subject !== 'string') {
          return Response.json(
             {
-               message: "Subject parameter must be a valid string.",
+               message: "Subject  is invalid.",
             },
             { status: 400 }
          );
@@ -78,8 +73,7 @@ export async function GET(request: NextRequest) {
          zscore, selectz, district, stream, university, subjects, keyword
       });
 
-      const keyFilePath = path.join(process.cwd(), 'service-account.json');
-      const keyFile = await fs.readFile(keyFilePath, 'utf-8');
+      const keyFile = process.env.GOOGLE_SERVICE_ACCOUNT!;
       const credentials = JSON.parse(keyFile);
 
       const auth = new google.auth.GoogleAuth({
@@ -89,8 +83,8 @@ export async function GET(request: NextRequest) {
 
       const sheets = google.sheets({ version: 'v4', auth });
 
-      const spreadsheetId = '11593XtsICvhF_yDD58mpxyheNGMQVdEcHld8oVVjrrw';  // Replace with your actual Sheet ID
-      const range = 'degree_programs!A1:AI262';
+      const spreadsheetId = process.env.SPREADSHEET_ID;  // Replace with your actual Sheet ID
+      const range = process.env.DEGREE_PROGRAMS_RANGE
 
       const response = await sheets.spreadsheets.values.get({
          spreadsheetId,
@@ -105,7 +99,7 @@ export async function GET(request: NextRequest) {
             {
                message: "No data found in the specified range.",
             },
-            { status: 400 }
+            { status: 500 }
          );
       }
 
@@ -159,6 +153,15 @@ export async function GET(request: NextRequest) {
       })
 
       finalData = finalData.sort((c1, c2) => parseFloat(c2.zscore) - parseFloat(c1.zscore))
+
+      if (finalData.length === 0) {
+         return Response.json(
+            {
+               message: "No courses found matching the criteria.",
+            },
+            { status: 404 }
+         );
+      }
 
       return Response.json(
 

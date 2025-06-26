@@ -57,7 +57,6 @@ export default function ResultsPage() {
       const keywd = keywordFromURL || ""
 
       if (streams.length > 0 && streamFromURL) {
-         console.log("Setting stream from URL: ", st)
          onInputChange(FilterType.STREAM, st);
       }
       if (districts.length > 0 && districtFromURL) {
@@ -69,7 +68,6 @@ export default function ResultsPage() {
             const subject = subjects.find(sub => sub.value == value);
             if (subject) subs.push(subject);
          });
-         console.log("Setting subjects from URL: ", subjects, subjectValues, subs)
          onInputChange(FilterType.SUBJECTS, subs);
       }
       if (universities.length > 0 && universityFromURL) {
@@ -117,59 +115,6 @@ export default function ResultsPage() {
       setSideBarDisplay("right-[-100%]")
       router.push(`/results?zscore=${zscore}&selectz=${selectZscore}&district=${district?.value}&stream=${stream?.value}&subjects=${selectedSubjects.map(s => s.value)}&university=${university?.value || ""}&keyword=${keyword}`);
    }
-
-   // const fetchCourses = (zscore: string, selectZscore: boolean, stream: string, district: string, subjects: string[], university: string, keywd: string) => {
-   //    console.log({ zscore, selectZscore, stream, district, subjects, university })
-   //    let filtered: CourseDataType[] = data
-   //    const validDist: keyof CourseDataType | undefined = district
-
-   //    if (!validDist || !stream || subjects.length == 0) {
-   //       return;
-   //    };
-
-   //    filtered = filtered.filter(course => course[validDist] != 'NQC')
-
-   //    if (!selectZscore) {
-   //       filtered = filtered.filter(course => parseFloat(course[validDist]) <= parseFloat(zscore))
-   //    }
-
-   //    filtered = filtered.filter(c => (c.stream == stream && subjects.every(sub => c.subjects.includes(sub))) || (c.stream != stream && subjects.every(sub => c.subjects.includes(sub))))
-
-   //    if (university != "") {
-   //       filtered = filtered.filter(c => c.university == university)
-   //    }
-
-   //    if (keyword != "") {
-   //       filtered = filtered.filter(c => c.course.toLowerCase().includes(keywd))
-   //    }
-   //    console.log(typeof (filtered))
-   //    console.log("filetred: ", filtered.length, data.length)
-
-   //    let finalData: TableDataType[] = filtered.map(c => {
-   //       const degrees = c.degree.split("|")
-   //       const durations = c.duration.split("|")
-         
-   //       const degree_duration_pairs = degrees.map((deg, index) => {
-   //          return {name: deg, duration: degrees.length == durations.length ? durations.at(index) : durations.at(0)}
-   //       })
-
-   //       return {
-   //          unicode: c.code,
-   //          courseCode: c.course_code,
-   //          courseName: c.course.toLowerCase(),
-   //          university: universities.find(u => u.value == c.university)?.label || "N/A",
-   //          zscore: Number.parseFloat(c[validDist]).toFixed(4),
-   //          isHidden: false,
-   //          medium: c.medium.split("|"),
-   //          degree_programs: degree_duration_pairs
-   //       }
-   //    })
-
-   //    finalData = finalData.sort((c1, c2) => parseFloat(c2.zscore) - parseFloat(c1.zscore))
-
-   //    setTableData(finalData)
-
-   // }
 
    function handleHide(code: string, isHidden: boolean) {
       console.log(code, isHidden)

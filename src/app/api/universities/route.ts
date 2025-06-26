@@ -5,8 +5,7 @@ import { promises as fs } from 'fs';
 export async function GET() {
 
    try {
-      const keyFilePath = path.join(process.cwd(), 'service-account.json');
-      const keyFile = await fs.readFile(keyFilePath, 'utf-8');
+      const keyFile = process.env.GOOGLE_SERVICE_ACCOUNT!;
       const credentials = JSON.parse(keyFile);
 
       const auth = new google.auth.GoogleAuth({
@@ -16,8 +15,8 @@ export async function GET() {
 
       const sheets = google.sheets({ version: 'v4', auth });
 
-      const spreadsheetId = '11593XtsICvhF_yDD58mpxyheNGMQVdEcHld8oVVjrrw';  // Replace with your actual Sheet ID
-      const range = 'universities!A1:B24';
+      const spreadsheetId = process.env.SPREADSHEET_ID;  // Replace with your actual Sheet ID
+      const range = process.env.UNIVERSIITIES_RANGE;
 
       const response = await sheets.spreadsheets.values.get({
          spreadsheetId,
@@ -31,7 +30,7 @@ export async function GET() {
             {
                message: "Invalid data format. Expected 'label' and 'value' columns. But found: " + titles.join(", "),
             },
-            { status: 400 }
+            { status: 500 }
          );
       }
 
@@ -41,7 +40,7 @@ export async function GET() {
             {
                message: "No data found in the specified range.",
             },
-            { status: 400 }
+            { status: 500 }
          );
       }
 
