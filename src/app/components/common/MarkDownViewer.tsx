@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-const MarkDownViewer = ({ filePath }: { filePath: string }) => {
+const MarkDownViewer = ({ course_code }: { course_code: string }) => {
   const [eligibility, setEligibility] = useState('');
 
   useEffect(() => {
     setEligibility('Loading...');
-    fetch(filePath)
+    fetch(`api/degree_programs/${course_code}`)
       .then(res => {
         if (!res.ok) {
-          throw new Error('File not found');
+          throw new Error('Internal server error');
         }
-        return res.text();
+        return res.json();
       })
-      .then(text => setEligibility(text))
-      .catch(() => setEligibility('N/A'));
-  }, [filePath]);
+      .then(res => setEligibility(res.data))
+      .catch(() => setEligibility('Not Available!'));
+  }, [course_code]);
 
   return (
     <div className="prose prose-sm sm:prose max-w-none *:text-sm">

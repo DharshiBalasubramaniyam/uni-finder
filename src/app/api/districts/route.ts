@@ -1,7 +1,6 @@
 import { google } from 'googleapis';
 
 export async function GET() {
-
    try {
       const keyFile = process.env.GOOGLE_SERVICE_ACCOUNT!;
       const credentials = JSON.parse(keyFile);
@@ -15,9 +14,10 @@ export async function GET() {
 
       const spreadsheetId = process.env.SPREADSHEET_ID;  // Replace with your actual Sheet ID
       const range = process.env.DISTRICTS_RANGE;
+
       const response = await sheets.spreadsheets.values.get({
          spreadsheetId,
-         range,
+         range
       });
 
       const titles = response.data.values?.[0] || [];
