@@ -2,7 +2,7 @@ import { google } from 'googleapis';
 
 export async function GET(
 request: Request,
-{params}: {params: {code: string}}
+context: {params: {code: string}}
 ) {
 
    try {
@@ -17,8 +17,7 @@ request: Request,
 
       const sheets = google.sheets({ version: 'v4', auth });
 
-      const code = params.code //  TypeError: Cannot read properties of undefined (reading 'code')
-
+      const code = context.params.code 
       const spreadsheetId = process.env.SPREADSHEET_ID;  
       const range = `course_descriptions!B${Number(code)+1}`;
 
