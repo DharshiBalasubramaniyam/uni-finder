@@ -32,7 +32,6 @@ export const DataStoreContext = createContext<{
    setData: () => {},
 })
 
-
 export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
    const [streams, setStreams] = useState<OptionType[]>([]);
    const [districts, setDistricts] = useState<OptionType[]>([]);
@@ -51,6 +50,7 @@ export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
       if (!response.ok) {
          router.push("/error");
          console.error(`Failed to fetch ${name} data:`, response);
+         return;
       }
       const data = await response.json();
       if (name!="degree_programs") {
