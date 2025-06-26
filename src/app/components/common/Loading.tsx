@@ -17,7 +17,6 @@ function Loading() {
                cssOverride={override}
                size={50}
                speedMultiplier={0.5}
-
                aria-label="Loading Spinner"
                data-testid="loader"
             />

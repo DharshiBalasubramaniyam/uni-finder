@@ -28,8 +28,8 @@ export const DataStoreContext = createContext<{
    universities: [],
    subjects: [],
    data: [],
-   fetchCourses: async () => {},
-   setData: () => {},
+   fetchCourses: async () => { },
+   setData: () => { },
 })
 
 export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
@@ -41,11 +41,6 @@ export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
    const router = useRouter();
 
    const fetchData = async (name: string, expiry_days: number, onComplete: (data: any[]) => void) => {
-      const cached = JSON.parse(localStorage.getItem(name) || "null");
-      if (name != "degree_programs" && cached && cached.expiredAt > Date.now()) {
-         onComplete(cached.data as any[]);
-         return;
-      }
       const response = await fetch(`/api/${name}`);
       if (!response.ok) {
          router.push("/error");
@@ -53,9 +48,7 @@ export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
          return;
       }
       const data = await response.json();
-      if (name!="degree_programs") {
-         localStorage.setItem(name, JSON.stringify({data: data.data, expiredAt: Date.now() + expiry_days * 24 * 60 * 60 * 1000}));
-      }
+      localStorage.setItem(name, JSON.stringify({ data: data.data, expiredAt: Date.now() + expiry_days * 24 * 60 * 60 * 1000 }));
       onComplete(data.data as any[]);
    }
 
@@ -90,16 +83,51 @@ export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
    }
 
    useEffect(() => {
-      fetchData("streams", 30, (data: any[]) => setStreams(data as OptionType[]))
-      fetchData("districts", 30, (data: any[]) => setDistricts(data as OptionType[]))
-      fetchData("subjects", 30, (data: any[]) => setSubjects(data as OptionType[]))
-      fetchData("universities", 30, (data: any[]) => setUniversities(data as OptionType[]))
+      ["streams", "districts", "subjects", "universities"].forEach(name => {
+         const cached = localStorage.getItem(name);
+         if (cached) {
+            const parsed = JSON.parse(cached);
+            if (parsed.expiredAt > Date.now()) {
+               switch (name) {
+                  case "streams":
+                     setStreams(parsed.data as OptionType[]);
+                     break;
+                  case "districts":
+                     setDistricts(parsed.data as OptionType[]);
+                     break;
+                  case "subjects":
+                     setSubjects(parsed.data as OptionType[]);
+                     break;
+                  case "universities":
+                     setUniversities(parsed.data as OptionType[]);
+                     break;
+               }
+               return;
+            }
+         } else {
+            console.warn(`No cached data found for ${name}. Fetching from API...`);
+            switch (name) {
+               case "streams":
+                  fetchData("streams", 30, (data: any[]) => setStreams(data as OptionType[]))
+                  break;
+               case "districts":
+                  fetchData("districts", 30, (data: any[]) => setDistricts(data as OptionType[]))
+                  break;
+               case "subjects":
+                  fetchData("subjects", 30, (data: any[]) => setSubjects(data as OptionType[]))
+                  break;
+               case "universities":
+                  fetchData("universities", 30, (data: any[]) => setUniversities(data as OptionType[]))
+                  break;
+            }
+         }
+      })
    }, []);
 
    return (
-      <DataStoreContext.Provider value={{streams, districts, universities, subjects, data, fetchCourses, setData}}>
+      <DataStoreContext.Provider value={{ streams, districts, universities, subjects, data, fetchCourses, setData }}>
          {
-            (subjects?.length > 0 && streams?.length > 0 && districts?.length > 0 && universities?.length > 0) ? children : <Loading/>
+            (subjects?.length > 0 && streams?.length > 0 && districts?.length > 0 && universities?.length > 0) ? children : <Loading />
          }
       </DataStoreContext.Provider>
    )
