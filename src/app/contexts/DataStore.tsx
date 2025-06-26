@@ -40,18 +40,6 @@ export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
    const [data, setData] = useState<TableDataType[]>([]);
    const router = useRouter();
 
-   const fetchData = async (name: string, expiry_days: number, onComplete: (data: any[]) => void) => {
-      const response = await fetch(`/api/${name}`);
-      if (!response.ok) {
-         router.push("/error");
-         console.error(`Failed to fetch ${name} data:`, response);
-         return;
-      }
-      const data = await response.json();
-      localStorage.setItem(name, JSON.stringify({ data: data.data, expiredAt: Date.now() + expiry_days * 24 * 60 * 60 * 1000 }));
-      onComplete(data.data as any[]);
-   }
-
    const fetchCourses = async (
       zscore: string,
       stream: string,
@@ -83,46 +71,64 @@ export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
    }
 
    useEffect(() => {
-      ["streams", "districts", "subjects", "universities"].forEach(name => {
-         const cached = localStorage.getItem(name);
-         if (cached) {
-            const parsed = JSON.parse(cached);
-            if (parsed.expiredAt > Date.now()) {
+      const loadAll = async () => {
+         const names = ["streams", "districts", "subjects", "universities"] as const;
+
+         await Promise.all(names.map(async (name) => {
+            try {
+               let data: any[] | null = null;
+               if (typeof window !== "undefined") {
+                  console.log(`Accessing localStorage access for ${name} on server side`);
+                  const cached = localStorage.getItem(name);
+
+                  if (cached) {
+                     const parsed = JSON.parse(cached);
+                     if (parsed.expiredAt > Date.now()) {
+                        data = parsed.data;
+                     }
+                  }
+
+               }
+               if (data) {
+                  console.log(`Using cached data for ${name}`);
+               } else {
+                  console.log(`No cached data for ${name}, fetching from API`);
+               }
+               if (!data) {
+                  const response = await fetch(`/api/${name}`);
+                  if (!response.ok) throw new Error(`${name} fetch failed`);
+                  const result = await response.json();
+                  data = result.data;
+                  localStorage.setItem(name, JSON.stringify({
+                     data,
+                     expiredAt: Date.now() + 30 * 24 * 60 * 60 * 1000
+                  }));
+               }
+
                switch (name) {
                   case "streams":
-                     setStreams(parsed.data as OptionType[]);
+                     setStreams(data as OptionType[]);
                      break;
                   case "districts":
-                     setDistricts(parsed.data as OptionType[]);
+                     setDistricts(data as OptionType[]);
                      break;
                   case "subjects":
-                     setSubjects(parsed.data as OptionType[]);
+                     setSubjects(data as OptionType[]);
                      break;
                   case "universities":
-                     setUniversities(parsed.data as OptionType[]);
+                     setUniversities(data as OptionType[]);
                      break;
                }
-               return;
+            } catch (err) {
+               console.error(`Error loading ${name}:`, err);
+               router.push("/error");
             }
-         } else {
-            console.warn(`No cached data found for ${name}. Fetching from API...`);
-            switch (name) {
-               case "streams":
-                  fetchData("streams", 30, (data: any[]) => setStreams(data as OptionType[]))
-                  break;
-               case "districts":
-                  fetchData("districts", 30, (data: any[]) => setDistricts(data as OptionType[]))
-                  break;
-               case "subjects":
-                  fetchData("subjects", 30, (data: any[]) => setSubjects(data as OptionType[]))
-                  break;
-               case "universities":
-                  fetchData("universities", 30, (data: any[]) => setUniversities(data as OptionType[]))
-                  break;
-            }
-         }
-      })
+         }));
+      };
+
+      loadAll();
    }, []);
+
 
    return (
       <DataStoreContext.Provider value={{ streams, districts, universities, subjects, data, fetchCourses, setData }}>
