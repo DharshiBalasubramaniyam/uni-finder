@@ -99,7 +99,7 @@ export function DataStoreProvider({ children }: PropsWithChildren<unknown>) {
    return (
       <DataStoreContext.Provider value={{streams, districts, universities, subjects, data, fetchCourses, setData}}>
          {
-            (subjects.length > 0 && streams.length > 0 && districts.length > 0 && universities.length > 0) ? children : <Loading/>
+            (subjects?.length > 0 && streams?.length > 0 && districts?.length > 0 && universities?.length > 0) ? children : <Loading/>
          }
       </DataStoreContext.Provider>
    )
