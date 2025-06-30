@@ -22,14 +22,13 @@ function ResultsTable({ tableColumns, tableData, handleHide, showEligibility }: 
                <thead>
                   <tr className="bg-gray-800">
                      {
-                        tableColumns.filter(c => c.show).map(c => {
-                           return <th key={c.columnName} className="p-2 uppercase">{c.columnName}</th>
-
+                        tableColumns.filter(c => c.show).map((c, index) => {
+                           return <th key={c.columnName} className={`${index == 0 ? "sticky left-0 z-10 bg-gray-800" : ""} p-2 uppercase`}>{c.columnName}</th>
                         })
                      }
                   </tr>
                </thead>
-               <tbody className="bg-gray-700 text-white text-sm *:text-center *:hover:bg-gray-600 *:border-b *:border-b-gray-800">
+               <tbody className="bg-gray-700 text-white text-sm *:text-center *:hover:bg-cyan-950 *:border-b *:border-b-gray-800">
                   {
                      tableData.map((course, index) => {
                         return course.isHidden ? (
@@ -50,7 +49,7 @@ function ResultsTable({ tableColumns, tableData, handleHide, showEligibility }: 
                               {tableColumns.map(c => {
                                  return (
                                     <>
-                                       {c.columnName == "unicode" && c.show && <td className="p-2">{course.unicode}</td>}
+                                       {c.columnName == "unicode" && c.show && <td className="p-2 sticky left-0 z-10 bg-gray-600 md:bg-transparent">{course.unicode}</td>}
                                        {c.columnName == "course name" && c.show && <td className="p-2 capitalize">{course.courseName}</td>}
                                        {c.columnName == "university" && c.show && <td className="p-2">{course.university}</td>}
                                        {c.columnName == "zscore" && c.show && <td className="p-2">{course.zscore}</td>}
