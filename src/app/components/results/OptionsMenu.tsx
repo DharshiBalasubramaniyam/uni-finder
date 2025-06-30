@@ -31,8 +31,9 @@ function OptionsMenu({tableColumns, setTableColumns, downLoadPDF, setSideBarDisp
                               return (
                                  <DropdownMenuCheckboxItem
                                     checked={c.show}
+                                    disabled={c.columnName === "unicode"}
                                     key={c.columnName}
-                                    className="px-4 py-2 outline-none cursor-pointer hover:bg-gray-500 capitalize border border-gray-600 flex items-center gap-3 text-sm"
+                                    className={`px-4 py-2 outline-none cursor-pointer hover:bg-gray-500 capitalize border border-gray-600 flex items-center gap-3 text-sm ${c.columnName === "unicode" ? "opacity-50" : ""}`}
                                     onCheckedChange={() => {
                                        setTableColumns(
                                           tableColumns.map((col: TableColumn) =>

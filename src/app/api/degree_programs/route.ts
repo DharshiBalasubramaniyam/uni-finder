@@ -109,7 +109,6 @@ export async function GET(request: NextRequest) {
          return obj;
       });
 
-
       let filtered = data as CourseDataType[]
       const validDist: keyof CourseDataType | undefined = district
 
@@ -120,7 +119,6 @@ export async function GET(request: NextRequest) {
       }
 
       filtered = filtered.filter(c => (c.stream == stream && subjects.every(sub => c.subjects.includes(sub))) || (c.stream != stream && subjects.every(sub => c.subjects.includes(sub))))
-
       if (university) {
          filtered = filtered.filter(c => c.university == university)
       }
@@ -128,7 +126,6 @@ export async function GET(request: NextRequest) {
       if (keyword) {
          filtered = filtered.filter(c => c.course.toLowerCase().includes(keyword))
       }
-      console.log("filetred: ", filtered.length, data.length)
 
       let finalData: TableDataType[] = filtered.map(c => {
          const degrees = c.degree.split("|")
@@ -159,12 +156,12 @@ export async function GET(request: NextRequest) {
             },
             { status: 404 }
          );
-}
+      }
 
       return Response.json(
          {
             message: "Data fetched successfully!",
-            data: finalData
+            data: finalData,
          },
          { status: 200 }
       );
