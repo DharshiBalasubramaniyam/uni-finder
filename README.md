@@ -31,10 +31,10 @@ Uni Finder is a web-based application designed to assist Advanced Level (A/L) st
 Dataset:
 
 > Note: All necessary data, including information on universities, districts, subject streams, subjects, and degree programs, is maintained in a structured [Google Sheet](https://docs.google.com/spreadsheets/d/11593XtsICvhF_yDD58mpxyheNGMQVdEcHld8oVVjrrw/edit?usp=drive_web&ouid=101553164679422943030). The course cut-off scores are extracted from the Academic year 2023/2024. The course eligibility requirement details are extracted from the University Handbook - 23/24
-
+<!--
 ## Live Deployment:
 
-The application is currently deployed and accessible via the following link: [Uni Finder Website](https://uni-finder-chi.vercel.app/)
+The application is currently deployed and accessible via the following link: [Uni Finder Website](https://uni-finder-chi.vercel.app/)-->
 
 ## How to run?
 
