@@ -46,7 +46,7 @@ function FilterValuesDisplay({ dataLength, zscoreRef, districtRef, streamRef, su
             {
                districtFromURL && (
                   <InputDisplay
-                     value={districtFromURL}
+                     value={districtFromURL.replace("_", " ")}
                      key="District"
                      onEdit={() => {
                         districtRef.current?.focus();
